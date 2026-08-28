@@ -1,6 +1,6 @@
 <pre style="font-family: 'Courier New', Courier, monospace;">
 
-┌────────────────────────────────────────────────────────┐
+       ┌────────────────────────────────────────────────────────┐
        │               DEVELOPER WORKSPACE (Local)              │
        │                                                        │
        │     [ Human Developer ] <───► [ OpenAI Codex ]         │
@@ -41,5 +41,5 @@
        │                                          │  OCI Cloud API   │
        │                                          │ ──► Autonomous DB│
        │                                          │ ──► OS Bucket    │
-       │                                          └──────────────────
+       │                                          └──────────────────┘
 </pre>
