@@ -14,12 +14,12 @@
 
 ## Platform bootstrap
 
-- [ ] Validate the current context and cluster access using the read-only
+- [x] Validate the current context and cluster access using the read-only
   primitive.
-- [ ] Record the one-time Flux bootstrap credential process: a short-lived,
+- [x] Record the one-time Flux bootstrap credential process: a short-lived,
   local-only GitHub fine-grained PAT creates a read-only deploy key; never
   commit it, add it to GitHub Actions, or store it as a runtime Flux token.
-- [ ] Add reviewed Flux bootstrap declarations and perform the approved Flux
+- [x] Add reviewed Flux bootstrap declarations and perform the approved Flux
   bootstrap.
 - [ ] Install Envoy Gateway and verify its GatewayClass and LoadBalancer.
 - [ ] Install Crossplane and its OCI provider configuration.
