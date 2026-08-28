@@ -8,10 +8,10 @@ quickstart, reviewed at repository revision `2234c2f` on 2026-08-28:
 - [OKE control-plane source](https://github.com/oracle-devrel/technology-engineering/tree/main/oci-and-db/cloud-native/devops-and-containers/oke/oke-rm/oke)
 
 The upstream separates network provisioning from OKE control-plane provisioning
-and uses the `oracle-terraform-modules/oke/oci` module. We will retain that
-separation, but create a project-owned configuration only after recording the
-target compartment, region, CIDRs, node shape, and public/private endpoint
-decisions in this change.
+and uses the `oracle-terraform-modules/oke/oci` module. This project owns a
+single bootstrap configuration around the same pinned module, so Terraform can
+create the VCN, cluster and fixed system pool in one dependency-aware apply.
+The component boundaries remain explicit in the inputs and outputs.
 
 Do not copy the upstream `stack.zip` as an opaque artifact or apply its default
 values without review. In particular, node pools are disabled by default and
@@ -21,5 +21,6 @@ be needed here.
 The project baseline is a new VCN in `eu-frankfurt-1`, a public Kubernetes API
 endpoint restricted to trusted administration CIDRs, private worker and pod
 subnets, a public application load-balancer subnet, and one initial managed
-system node. Environment-specific values belong in the ignored
+system node. The follow-up Flux change installs Karpenter and creates its OCI
+workload-identity policies. Environment-specific values belong in the ignored
 `terraform.tfvars`; see `terraform.tfvars.example` for the versioned shape.

@@ -1,15 +1,19 @@
 # Copy this file to terraform.tfvars for local or Resource Manager-backed input.
 # Do not commit terraform.tfvars.
 
+tenancy_id     = "REPLACE_WITH_TENANCY_OCID"
 region         = "eu-frankfurt-1"
 compartment_id = "REPLACE_WITH_COMPARTMENT_OCID"
 
-create_vcn                    = true
-control_plane_is_public        = true
-control_plane_allowed_cidrs    = ["REPLACE_WITH_ADMIN_PUBLIC_IP_CIDR"]
-worker_nodes_in_private_subnet = true
-pods_in_private_subnet         = true
-gateway_load_balancer_is_public = true
+# This is the public egress address of the workstation or VPN, never localhost.
+control_plane_allowed_cidrs = ["REPLACE_WITH_ADMIN_PUBLIC_IP_CIDR"]
+
+# New VCN; worker and pod subnets are private. The Kubernetes API and future
+# Gateway API load balancer are public, with the API restricted above.
+cluster_name       = "oke-openspec-codex"
+kubernetes_version = "v1.35.2"
+vcn_cidr           = "10.42.0.0/16"
+services_cidr      = "10.96.0.0/16"
 
 # The initial managed system pool hosts Flux, Envoy Gateway, Crossplane, and
 # Karpenter before workload capacity is provisioned dynamically.
@@ -18,7 +22,6 @@ system_node_shape = "VM.Standard.E5.Flex"
 system_node_ocpus = 1
 system_node_memory_gb = 8
 
-enable_karpenter = true
-
 # Karpenter capacity is configured later in GitOps manifests. Keep manual
-# static capacity and automatic dynamic capacity as separate NodePools.
+# static capacity and automatic dynamic capacity as separate NodePools. Its
+# OCI workload-identity policies are added with the Flux/Karpenter change.
