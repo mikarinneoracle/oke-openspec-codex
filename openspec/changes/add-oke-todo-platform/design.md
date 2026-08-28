@@ -25,6 +25,12 @@ CI build              -> Object Storage UI release
 Flux is the only planned route for applying application and platform manifests
 after bootstrap. Local `kubectl` remains read-only.
 
+The one-time Flux bootstrap uses a short-lived, local GitHub fine-grained PAT
+only to create a read-only GitHub deploy key. The deploy key is the Flux
+runtime credential; the PAT is never committed, added to GitHub Actions, or
+stored as a Flux HTTPS token. Record and rotate the deploy key through the
+bootstrap procedure when its originating PAT expires.
+
 ## Repository ownership
 
 - `apps/todo-db-app/`: React/Vite UI source, imported in a later change.

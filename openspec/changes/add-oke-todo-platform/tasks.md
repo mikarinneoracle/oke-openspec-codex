@@ -8,14 +8,17 @@
 
 ## Prerequisites supplied by the user
 
-- [ ] Create the OKE enhanced cluster.
-- [ ] Configure the local `kubectl` context for that cluster.
-- [ ] Provide confirmation that read-only cluster validation may begin.
+- [x] Create the OKE enhanced cluster.
+- [x] Configure the local `kubectl` context for that cluster.
+- [x] Provide confirmation that read-only cluster validation may begin.
 
 ## Platform bootstrap
 
 - [ ] Validate the current context and cluster access using the read-only
   primitive.
+- [ ] Record the one-time Flux bootstrap credential process: a short-lived,
+  local-only GitHub fine-grained PAT creates a read-only deploy key; never
+  commit it, add it to GitHub Actions, or store it as a runtime Flux token.
 - [ ] Add reviewed Flux bootstrap declarations and perform the approved Flux
   bootstrap.
 - [ ] Install Envoy Gateway and verify its GatewayClass and LoadBalancer.
