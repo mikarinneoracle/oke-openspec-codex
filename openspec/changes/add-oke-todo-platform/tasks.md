@@ -21,8 +21,9 @@
   commit it, add it to GitHub Actions, or store it as a runtime Flux token.
 - [x] Add reviewed Flux bootstrap declarations and perform the approved Flux
   bootstrap.
-- [ ] Install Envoy Gateway and verify its GatewayClass and LoadBalancer.
-- [ ] Install Crossplane and its OCI provider configuration.
+- [ ] Install Envoy Gateway through Flux and verify its GatewayClass and
+  LoadBalancer.
+- [ ] Install Crossplane and its OCI provider configuration through Flux.
 
 ## Application delivery
 
