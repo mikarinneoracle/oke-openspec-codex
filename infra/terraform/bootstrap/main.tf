@@ -34,9 +34,11 @@ module "oke" {
   cluster_name       = var.cluster_name
   cluster_type       = "enhanced"
 
-  # Required later by the Karpenter OCI provider's workload identity.
+  # OIDC discovery is required later by the Karpenter OCI provider's workload
+  # identity. OIDC token authentication is a separate client-ID based feature
+  # and is deliberately not enabled for this bootstrap.
   oidc_discovery_enabled  = true
-  oidc_token_auth_enabled = true
+  oidc_token_auth_enabled = false
 
   worker_pool_mode                      = "node-pool"
   worker_image_type                     = "oke"
