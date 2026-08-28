@@ -8,7 +8,7 @@ and Oracle database access without exposing database credentials to a browser.
 
 ## What changes
 
-- Add a React/Vite Todo UI under `apps/todo-web-ui/`.
+- Add a React/Vite Todo UI under `apps/todo-db-app/`.
 - Add a Node.js Todo REST API under `services/todo-api/`, using `node-oracledb`.
 - Use Envoy Gateway with standard Gateway API resources for `/` and `/api`
   routing.

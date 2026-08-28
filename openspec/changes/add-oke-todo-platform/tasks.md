@@ -23,7 +23,7 @@
 
 ## Application delivery
 
-- [ ] Import the Todo UI source under `apps/todo-web-ui/`.
+- [ ] Import the Todo UI source under `apps/todo-db-app/`.
 - [ ] Implement the Node.js REST API and its `node-oracledb` persistence.
 - [ ] Declare Object Storage, workload identity, and required database resources
   through Crossplane.

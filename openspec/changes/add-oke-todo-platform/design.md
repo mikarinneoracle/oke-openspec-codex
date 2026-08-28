@@ -27,7 +27,7 @@ after bootstrap. Local `kubectl` remains read-only.
 
 ## Repository ownership
 
-- `apps/todo-web-ui/`: React/Vite UI source, imported in a later change.
+- `apps/todo-db-app/`: React/Vite UI source, imported in a later change.
 - `services/todo-api/`: Node.js REST API source and database integration.
 - `platform/bootstrap/flux/`: Flux bootstrap declarations.
 - `platform/gateway/envoy-gateway/`: Envoy Gateway installation and shared
