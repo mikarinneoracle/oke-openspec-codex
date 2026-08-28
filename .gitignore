@@ -1,0 +1,8 @@
+# Terraform local state and environment-specific values
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+terraform.tfvars
+terraform.tfvars.json
