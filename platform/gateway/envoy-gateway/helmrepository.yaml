@@ -5,4 +5,5 @@ metadata:
   namespace: envoy-gateway-system
 spec:
   type: oci
-  url: oci://docker.io/envoyproxy/gateway-helm
+  # Flux appends HelmRelease.spec.chart.spec.chart to this OCI registry path.
+  url: oci://docker.io/envoyproxy
