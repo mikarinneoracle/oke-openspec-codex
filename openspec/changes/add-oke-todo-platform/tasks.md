@@ -22,7 +22,7 @@
 - [x] Add reviewed Flux bootstrap declarations and perform the approved Flux
   bootstrap.
 - [x] Install Envoy Gateway through Flux.
-- [ ] Verify Envoy Gateway's GatewayClass and the LoadBalancer created by the
+- [x] Verify Envoy Gateway's GatewayClass and the LoadBalancer created by the
   shared Gateway resource.
 - [x] Install Crossplane through Flux.
 - [ ] Install Crossplane's OCI provider configuration through Flux.
