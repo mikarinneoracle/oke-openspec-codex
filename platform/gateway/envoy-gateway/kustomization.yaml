@@ -4,3 +4,6 @@ resources:
   - namespace.yaml
   - helmrepository.yaml
   - helmrelease.yaml
+  - envoyproxy.yaml
+  - gatewayclass.yaml
+  - gateway.yaml
