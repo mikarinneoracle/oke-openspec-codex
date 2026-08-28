@@ -2,11 +2,11 @@
 # Do not commit terraform.tfvars.
 
 region         = "eu-frankfurt-1"
-compartment_id = "REPLACE_WITH_MIKA_RINNE_COMPARTMENT_OCID"
+compartment_id = "REPLACE_WITH_COMPARTMENT_OCID"
 
 create_vcn                    = true
 control_plane_is_public        = true
-control_plane_allowed_cidrs    = ["REPLACE_WITH_TRUSTED_ADMIN_CIDR"]
+control_plane_allowed_cidrs    = ["REPLACE_WITH_ADMIN_PUBLIC_IP_CIDR"]
 worker_nodes_in_private_subnet = true
 pods_in_private_subnet         = true
 gateway_load_balancer_is_public = true
@@ -14,7 +14,7 @@ gateway_load_balancer_is_public = true
 # The initial managed system pool hosts Flux, Envoy Gateway, Crossplane, and
 # Karpenter before workload capacity is provisioned dynamically.
 system_node_count = 1
-system_node_shape = "REPLACE_WITH_APPROVED_FLEX_SHAPE"
+system_node_shape = "VM.Standard.E5.Flex"
 system_node_ocpus = 1
 system_node_memory_gb = 8
 
