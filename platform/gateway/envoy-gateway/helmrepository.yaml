@@ -1,9 +1,13 @@
 apiVersion: source.toolkit.fluxcd.io/v1
-kind: HelmRepository
+kind: OCIRepository
 metadata:
   name: envoy-gateway
   namespace: envoy-gateway-system
 spec:
-  type: oci
-  # Flux appends HelmRelease.spec.chart.spec.chart to this OCI registry path.
-  url: oci://docker.io/envoyproxy
+  interval: 1h0m0s
+  url: oci://docker.io/envoyproxy/gateway-helm
+  layerSelector:
+    mediaType: application/vnd.cncf.helm.chart.content.v1.tar+gzip
+    operation: copy
+  ref:
+    tag: v1.9.0

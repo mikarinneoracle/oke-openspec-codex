@@ -5,13 +5,9 @@ metadata:
   namespace: envoy-gateway-system
 spec:
   interval: 10m0s
-  chart:
-    spec:
-      chart: gateway-helm
-      version: v1.9.0
-      sourceRef:
-        kind: HelmRepository
-        name: envoy-gateway
+  chartRef:
+    kind: OCIRepository
+    name: envoy-gateway
   install:
     createNamespace: true
     remediation:
@@ -20,6 +16,12 @@ spec:
     remediation:
       retries: 3
   values:
+    certgen:
+      job:
+        tolerations:
+          - key: CriticalAddonsOnly
+            operator: Exists
+            effect: NoSchedule
     deployment:
       pod:
         tolerations:
