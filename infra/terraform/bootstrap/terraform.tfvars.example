@@ -11,7 +11,7 @@ control_plane_allowed_cidrs = ["REPLACE_WITH_ADMIN_PUBLIC_IP_CIDR"]
 # New VCN; worker and pod subnets are private. The Kubernetes API and future
 # Gateway API load balancer are public, with the API restricted above.
 cluster_name       = "oke-openspec-codex"
-kubernetes_version = "v1.35.2"
+kubernetes_version = "v1.36.1"
 vcn_cidr           = "10.42.0.0/16"
 services_cidr      = "10.96.0.0/16"
 

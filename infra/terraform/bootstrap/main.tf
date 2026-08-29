@@ -60,6 +60,13 @@ module "oke" {
       boot_volume_size   = 100
       placement_ads      = ["1"]
       kubernetes_version = var.kubernetes_version
+      # Keep the single system node current during OKE/image upgrades without
+      # deleting it first. OKE creates one replacement node, waits for it to
+      # be available, then removes the previous node.
+      node_cycling_enabled         = true
+      node_cycling_max_surge       = 1
+      node_cycling_max_unavailable = 0
+      node_cycling_mode            = ["instance"]
       node_labels = {
         "node-role/system" = "true"
       }

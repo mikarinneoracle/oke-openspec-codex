@@ -11,6 +11,8 @@
 - [x] Create the OKE enhanced cluster.
 - [x] Configure the local `kubectl` context for that cluster.
 - [x] Provide confirmation that read-only cluster validation may begin.
+- [x] Upgrade the OKE control plane and system node pool to `v1.36.1` through
+  Terraform, using rolling node cycling, and verify the replacement node.
 
 ## Platform bootstrap
 

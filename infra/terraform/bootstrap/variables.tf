@@ -23,7 +23,7 @@ variable "cluster_name" {
 variable "kubernetes_version" {
   description = "OKE Kubernetes version to provision."
   type        = string
-  default     = "v1.35.2"
+  default     = "v1.36.1"
 }
 
 variable "vcn_cidr" {
