@@ -45,7 +45,7 @@
     create application Vault resources with Terraform; establish the GitOps
     secret-generation and synchronization flow without placing values in Git or
     Terraform state.
-  - [ ] Ensure the initial OKE bootstrap grants the Crossplane OCI workload only
+  - [x] Ensure the initial OKE bootstrap grants the Crossplane OCI workload only
     the Object Storage, Autonomous Database, and network permissions it needs,
     and grants the External Secrets workload only the OCI Vault secret-family
     permissions it needs. Do not add these through a post-bootstrap Terraform
@@ -62,9 +62,10 @@
         instance.
       - `manage virtual-network-family in compartment`, so Crossplane creates
         the ADB private subnet and network security group/rules.
-      - `read vaults in compartment` and `manage keys in compartment`, so
-        Crossplane can use the existing Vault and create the application-owned
-        encryption key required by ESO PushSecret. It must not create a Vault.
+      - `read vaults in compartment`, `use vaults` restricted to the existing
+        Vault OCID, and `manage keys in compartment`, so Crossplane can use the
+        existing Vault and create the application-owned encryption key required
+        by ESO PushSecret. It must not create a Vault.
     - ESO Vault principal:
       `crossplane-system/todo-vault-reader`, constrained by this OKE cluster
       ID and referenced by the namespaced `SecretStore`. Its OCI IAM policy
@@ -77,7 +78,7 @@
       bootstrap-access exception. The policies enable Crossplane and ESO to act
       but are not application infrastructure and are never managed by a
       post-bootstrap Terraform apply.
-  - [ ] Install External Secrets Operator (ESO) through Flux. Use OKE Workload
+  - [x] Install External Secrets Operator (ESO) through Flux. Use OKE Workload
     Identity to generate the database-admin password, store it in the existing
     OCI Vault, and materialize it only as the scoped
     `crossplane-system` Kubernetes Secret required by Crossplane.
