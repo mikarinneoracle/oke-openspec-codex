@@ -37,24 +37,30 @@
 - [ ] Declare Object Storage, workload identity, and required database resources
   through Crossplane.
   - [x] Install the OCI Database Crossplane provider through Flux.
-  - [x] Create a dedicated private subnet and network security rules for the
-    Autonomous Database private endpoint.
-  - [x] Use the existing OCI Vault (the tenancy Vault limit prevents creating a
-    new one), create a dedicated encryption key, and generate the database-admin
-    password with Terraform. Keep the password out of Git; Terraform state is
-    local and contains it as a sensitive value.
-  - [ ] Grant the Crossplane OCI workload only Object Storage and Autonomous
-    Database permissions, and grant the External Secrets workload only the OCI
-    Vault secret-family permissions it needs.
-  - [ ] Install External Secrets Operator through Flux and use OKE Workload
-    Identity to synchronize the Vault database-admin secret to
-    `crossplane-system`.
+  - [ ] Declare a dedicated private subnet and network security rules for the
+    Autonomous Database private endpoint through Crossplane.
+  - [ ] Treat the existing tenancy Vault as an external prerequisite. Do not
+    create application Vault resources with Terraform; establish the GitOps
+    secret-generation and synchronization flow without placing values in Git or
+    Terraform state.
+  - [ ] Ensure the initial OKE bootstrap grants the Crossplane OCI workload only
+    the Object Storage, Autonomous Database, and network permissions it needs,
+    and grants the External Secrets workload only the OCI Vault secret-family
+    permissions it needs. Do not add these through a post-bootstrap Terraform
+    apply.
+  - [ ] Install External Secrets Operator (ESO) through Flux. Use OKE Workload
+    Identity to generate the database-admin password, store it in the existing
+    OCI Vault, and materialize it only as the scoped
+    `crossplane-system` Kubernetes Secret required by Crossplane.
   - [ ] Declare a private Autonomous Database Serverless instance through
     Crossplane with `ECPU` compute model, 2 ECPUs, 20 GB initial storage, and
     auto scaling disabled.
   - [ ] Declare the private versioned UI artefact bucket through Crossplane.
   - [ ] Create the Todo UI release-downloader ServiceAccount and grant it read
     access only to that bucket through OKE Workload Identity.
+  - [x] Remove the Terraform-created ADB subnet, NSG, Vault key, Vault secret,
+    and local generated password after explicit approval. The shared existing
+    OCI Vault remains an external platform prerequisite.
 - [ ] Add UI and API Kubernetes manifests, Gateway, and HTTPRoute.
 - [ ] Build, test, and publish a versioned UI artefact to Object Storage.
 - [ ] Verify Flux reconciliation and the browser request flow.

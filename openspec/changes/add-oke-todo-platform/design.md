@@ -25,6 +25,12 @@ CI build              -> Object Storage UI release
 Flux is the only planned route for applying application and platform manifests
 after bootstrap. Local `kubectl` remains read-only.
 
+Terraform is limited to the one-time initial OKE bootstrap: the cluster
+foundation and the least-privilege IAM policies needed before OKE Workload
+Identity consumers can start. It must not create, update, import, or destroy
+application or post-bootstrap platform infrastructure after that handoff.
+Crossplane owns the Todo application's OCI resources through Flux.
+
 The one-time Flux bootstrap uses a short-lived, local GitHub fine-grained PAT
 only to create a read-only GitHub deploy key. The deploy key is the Flux
 runtime credential; the PAT is never committed, added to GitHub Actions, or
@@ -46,21 +52,20 @@ bootstrap procedure when its originating PAT expires.
 - Database connection details are supplied to the API only through runtime
   secret references; no secret values are committed.
 - The Crossplane OCI provider uses OKE Workload Identity through the
-  `crossplane-provider-oci` ServiceAccount. Terraform grants that workload only
-  Object Storage permissions in the project compartment, constrained to this
-  cluster and namespace; no OCI API key is stored in Git or Kubernetes.
+  `crossplane-provider-oci` ServiceAccount. Its least-privilege bootstrap IAM
+  policy is established as part of the initial OKE bootstrap, before the
+  provider runs; no OCI API key is stored in Git or Kubernetes.
 - Workload identity grants the UI release downloader read access only to its
   designated bucket/path.
 - The Todo database is a private Autonomous Database Serverless instance using
   the `ECPU` compute model with 2 ECPUs, 20 GB initial storage, and auto
   scaling disabled. Its private endpoint has a dedicated subnet and security
   rules rather than a public database endpoint.
-- Terraform uses an existing OCI Vault because the tenancy cannot create an
-  additional Vault. It creates a dedicated encryption key and generated
-  database-admin password there. The password is stored in OCI Vault and in
-  local Terraform state as a sensitive value; it is never committed. External
-  Secrets Operator, installed by Flux, uses a dedicated OKE Workload Identity
-  to synchronize the password only to the namespace Crossplane needs while
-  provisioning the database.
+- The tenancy's existing OCI Vault is an external platform prerequisite because
+  its Vault limit prevents creating an additional Vault. Crossplane declares
+  the application-owned OCI resources; External Secrets Operator, installed by
+  Flux, generates and synchronizes the database-admin secret through OCI Vault
+  to the namespace Crossplane needs. Secret values are never committed or held
+  in Terraform state.
 - API access uses the same public origin (`/api`) as the UI, avoiding a browser
   CORS dependency.

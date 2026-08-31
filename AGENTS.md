@@ -19,3 +19,21 @@
 - Commit reviewed declarative manifests to Git; Flux performs cluster mutation
   only after the user has created the OKE cluster and explicitly approved the
   bootstrap step.
+
+## Terraform boundary
+
+- Follow the [`terraform-bootstrap-only`](.agents/primitives/terraform-bootstrap-only.md)
+  primitive.
+- Terraform is limited to the one-time initial OKE cluster bootstrap, including
+  only the cluster foundation and bootstrap IAM required before OKE Workload
+  Identity consumers can run.
+- After that handoff, Terraform must not create, update, import, or destroy
+  application or post-bootstrap platform infrastructure. Flux and Crossplane
+  own those resources through reviewed Git manifests.
+
+## External secrets
+
+- Follow the [`external-secrets-vault`](.agents/primitives/external-secrets-vault.md)
+  primitive for Vault-backed secret delivery.
+- Flux installs and configures External Secrets Operator (ESO); Crossplane
+  consumes only scoped Kubernetes Secret references, never literal values.

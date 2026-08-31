@@ -77,11 +77,56 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: crossplane-oci-networking
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: crossplane-oci-family
+  interval: 10m0s
+  path: ./platform/crossplane/oci-networking
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  timeout: 10m0s
+  wait: true
+  healthChecks:
+    - apiVersion: pkg.crossplane.io/v1
+      kind: Provider
+      name: provider-oci-networking
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-oci-kms
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: crossplane-oci-family
+  interval: 10m0s
+  path: ./platform/crossplane/oci-kms
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  timeout: 10m0s
+  wait: true
+  healthChecks:
+    - apiVersion: pkg.crossplane.io/v1
+      kind: Provider
+      name: provider-oci-kms
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: crossplane-oci-config
   namespace: flux-system
 spec:
   dependsOn:
     - name: crossplane-oci-objectstorage
+    - name: crossplane-oci-database
+    - name: crossplane-oci-networking
+    - name: crossplane-oci-kms
   interval: 10m0s
   path: ./platform/crossplane/oci-config
   prune: true

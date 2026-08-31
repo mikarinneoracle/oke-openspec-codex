@@ -1,0 +1,8 @@
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-oci-kms
+spec:
+  package: ghcr.io/oracle/provider-oci-kms:v1.1.0
+  runtimeConfigRef:
+    name: oci-workload-identity

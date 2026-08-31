@@ -16,10 +16,16 @@ and Oracle Autonomous Database persistence.
   receives database credentials.
 - Crossplane declares OCI infrastructure required by the application.
 - Flux reconciles reviewed Git manifests to the cluster.
+- External Secrets Operator (ESO), reconciled by Flux, is the approved bridge
+  from OCI Vault to scoped Kubernetes Secrets. Crossplane and workloads consume
+  references only; no secret values are committed to Git.
 
 ## Delivery model
 
-- Terraform provisions the OKE bootstrap infrastructure before Flux exists.
+- Terraform provisions only the initial OKE bootstrap infrastructure before
+  Flux exists: the cluster foundation and bootstrap IAM required for OKE
+  Workload Identity. It does not manage application or post-bootstrap platform
+  infrastructure after that handoff.
 - GitHub Actions validates Terraform and application changes, builds release
   artefacts, and commits approved release references to Git.
 - GitHub Actions does not receive Kubernetes write access and does not run

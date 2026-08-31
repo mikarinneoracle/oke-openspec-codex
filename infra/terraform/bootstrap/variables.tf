@@ -38,24 +38,6 @@ variable "services_cidr" {
   default     = "10.96.0.0/16"
 }
 
-variable "adb_private_subnet_cidr" {
-  description = "Dedicated private subnet CIDR for the Todo Autonomous Database endpoint."
-  type        = string
-  default     = "10.42.160.0/24"
-}
-
-variable "pod_subnet_cidr" {
-  description = "OKE pod subnet CIDR allowed to reach the Todo Autonomous Database over TCPS."
-  type        = string
-  default     = "10.42.64.0/18"
-}
-
-variable "todo_vault_id" {
-  description = "Existing OCI Vault OCID used for Todo database secrets; set only in local terraform.tfvars."
-  type        = string
-  sensitive   = true
-}
-
 variable "control_plane_allowed_cidrs" {
   description = "Public source CIDRs allowed to reach the Kubernetes API endpoint."
   type        = list(string)
