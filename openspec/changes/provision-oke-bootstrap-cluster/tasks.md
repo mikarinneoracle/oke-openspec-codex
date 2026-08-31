@@ -61,11 +61,10 @@
     does not create an artificial Karpenter scale-out demand. Manage this as a
     narrow, non-pruning Flux server-side-apply overlay; do not replace the OKE
     add-on Deployment or patch it manually.
-  - During a failed KPO node-registration investigation, enable KPO's
-    `logLevel: debug` through its Flux HelmRelease and use a temporary
-    Git-managed `karpenter-registration-probe` targeted to the application
-    NodePool. Remove the probe and restore `logLevel: info` once the bootstrap
-    cause is established.
+  - KPO node registration was validated with a temporary Git-managed
+    `karpenter-registration-probe` targeted to the application NodePool. The
+    probe was removed and KPO logging restored to `info` after a workload node
+    registered successfully.
   - Set `settings.apiserverEndpoint` to the OKE private endpoint IP only (for
     this cluster, `10.42.0.12`), without `:6443`. KPO passes the value to
     `oke-install.sh`, which owns the API port selection during worker bootstrap.

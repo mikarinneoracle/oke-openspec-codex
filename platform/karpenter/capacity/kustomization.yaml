@@ -3,4 +3,3 @@ kind: Kustomization
 resources:
   - workload-nodeclass.yaml
   - workload-nodepool.yaml
-  - registration-probe.yaml
