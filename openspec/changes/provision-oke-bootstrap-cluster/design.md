@@ -76,8 +76,9 @@ to Karpenter nodes when necessary.
 
 ## GitHub Actions credentials
 
-Initial workflows only validate and plan. If a later workflow needs OCI access
-to publish OCIR images or Object Storage artefacts, grant it a narrowly scoped,
-non-human OCI identity through protected GitHub environment secrets. Do not add
-Kubernetes credentials. Evaluate OIDC-based OCI authentication before choosing
-long-lived signing-key material.
+Initial workflows only validate and plan. The Todo UI publication workflow uses
+a time-bound, write-only Object Storage PAR scoped to the `releases/` prefix,
+stored only as a protected GitHub Environment secret. It therefore needs no OCI
+user, API key, or Workload Identity. Do not add Kubernetes credentials. The
+PAR is a bearer secret: rotate it before expiry or immediately after suspected
+exposure, and never emit it to logs or commit it to Git.

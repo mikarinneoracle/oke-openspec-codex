@@ -28,7 +28,10 @@
 
 - [ ] Add a pull-request workflow for Terraform formatting, validation, and
   plan output.
-- [ ] Add protected environment configuration for any OCI publish credential.
+- [ ] Add a protected GitHub Environment secret named
+  `OCI_TODO_UI_WRITE_PAR_URL`, containing only a time-bound `AnyObjectWrite`
+  PAR restricted to the Todo UI bucket's `releases/` prefix. Do not configure
+  an OCI user/API key for UI artefact publication.
 - [ ] Add build, test, image publication, and UI artefact publication after the
   application source is imported.
 - [ ] Commit release references for Flux; never apply manifests from Actions.

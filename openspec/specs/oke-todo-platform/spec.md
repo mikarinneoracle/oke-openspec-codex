@@ -27,9 +27,14 @@ and Oracle Autonomous Database persistence.
   Workload Identity. It does not manage application or post-bootstrap platform
   infrastructure after that handoff.
 - GitHub Actions validates Terraform and application changes, builds release
-  artefacts, and commits approved release references to Git.
+  artefacts, publishes the versioned UI artefact through a time-bound,
+  write-only Object Storage PAR stored as a protected GitHub Environment
+  secret, and commits approved release references to Git.
 - GitHub Actions does not receive Kubernetes write access and does not run
   `kubectl apply`.
+- The PAR is scoped to the UI bucket's `releases/` prefix and is a CI-only
+  bearer secret. UI runtime reads use a separate OKE Workload Identity rather
+  than the CI PAR.
 - Flux runs in OKE and polls the GitHub repository. It is the continuous
   Kubernetes reconciler after the one-time approved bootstrap handoff.
 

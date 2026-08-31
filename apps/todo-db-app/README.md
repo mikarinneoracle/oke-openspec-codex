@@ -21,5 +21,8 @@ npm run build
 npm run lint
 ```
 
-`dist/` on rakennusartefakti. Se julkaistaan myöhemmässä vaiheessa versionoituna
-OCI Object Storageen eikä sitä commitata.
+`dist/` on rakennusartefakti. GitHub Actions julkaisee sen versionoituna OCI
+Object Storageen write-only PAR-URL:lla, joka on ainoastaan suojattuna GitHub
+Environment Secretinä (`OCI_TODO_UI_WRITE_PAR_URL`). URL on bearer-salaisuus,
+eikä sitä commitata, tulosteta lokiin tai anneta käyttöliittymäpodille. UI-podi
+hakee valitun releasen omalla read-only OKE Workload Identityllään.

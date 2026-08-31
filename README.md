@@ -51,6 +51,12 @@
                          └──────────────────────────┘
 </pre>
 
+UI-artefaktit julkaistaan GitHub Actionsista Object Storageen määräaikaisella,
+vain `releases/`-prefiksiin rajatulla write-PAR-URL:lla. URL säilytetään vain
+suojattuna GitHub Environment Secretinä; Flux on edelleen ainoa Kubernetesiin
+kirjoittava toimija, ja UI-podi lukee artefaktin erillisellä read-only OKE
+Workload Identityllä.
+
 <pre style="font-family: 'Courier New', Courier, monospace;">
 
        TODO APPLICATION RUNTIME

@@ -31,6 +31,13 @@ Identity consumers can start. It must not create, update, import, or destroy
 application or post-bootstrap platform infrastructure after that handoff.
 Crossplane owns the Todo application's OCI resources through Flux.
 
+GitHub Actions publishes a versioned UI artefact using a time-bound,
+write-only Object Storage pre-authenticated request (PAR) scoped to the
+bucket's `releases/` prefix. The full PAR URL is a protected GitHub Environment
+secret and never enters Git, Kubernetes, Terraform state, or workflow output.
+This avoids an OCI user/API key in Actions. It does not replace the UI
+workload's separate read-only OKE Workload Identity.
+
 The one-time Flux bootstrap uses a short-lived, local GitHub fine-grained PAT
 only to create a read-only GitHub deploy key. The deploy key is the Flux
 runtime credential; the PAT is never committed, added to GitHub Actions, or
@@ -57,6 +64,9 @@ bootstrap procedure when its originating PAT expires.
   provider runs; no OCI API key is stored in Git or Kubernetes.
 - Workload identity grants the UI release downloader read access only to its
   designated bucket/path.
+- GitHub Actions uses no OCI IAM principal for UI publication. Its protected
+  environment holds only a write-only, expiry-bound PAR URL limited to the UI
+  artefact `releases/` prefix; it must not be used by the UI runtime.
 - The Todo database is a private Autonomous Database Serverless instance using
   the `ECPU` compute model with 2 ECPUs, 20 GB initial storage, and auto
   scaling disabled. Its private endpoint has a dedicated subnet and security
