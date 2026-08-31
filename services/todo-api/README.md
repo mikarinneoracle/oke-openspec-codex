@@ -24,8 +24,10 @@ Do not commit their values:
   replaced by a separate HTTPS UI origin)
 
 Run [`database/schema.sql`](database/schema.sql) in the application schema
-before the readiness endpoint can succeed. The later Crossplane/database task
-owns database provisioning and runtime secret delivery.
+before serving task requests. The Flux-managed API Deployment runs the same
+schema through an idempotent initContainer: the first replica creates the
+table, and later replicas accept Oracle's already-exists result. Crossplane and
+ESO own database provisioning and runtime secret delivery.
 
 Each API pod uses a lazy `node-oracledb` pool with `poolMin: 0` and
 `poolMax: 1`. A pool avoids opening a new database connection for every HTTP

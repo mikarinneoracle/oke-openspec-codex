@@ -52,7 +52,9 @@ spec:
     sourceType: CIDR_BLOCK
     tcpOptions:
       - destinationPortRange:
-          - min: 1522
-            max: 1522
+          # The API uses the ADB server-TLS connection string. Port 1522 is
+          # reserved for mTLS/wallet connections and is deliberately not used.
+          - min: 1521
+            max: 1521
   providerConfigRef:
     name: default

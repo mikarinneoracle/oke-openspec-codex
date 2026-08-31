@@ -97,6 +97,11 @@
     and local generated password after explicit approval. The shared existing
     OCI Vault remains an external platform prerequisite.
 - [ ] Add UI and API Kubernetes manifests, Gateway, and HTTPRoute.
+  - [x] Add an idempotent API schema-migration command for the initial
+    `todo_items` table. The Deployment will run it as an initContainer using
+    the scoped database runtime secret.
+  - [x] Allow only server-TLS ADB traffic on TCP `1521` from the OKE pod CIDR;
+    the demo does not use the mTLS/wallet port `1522`.
   - [ ] Add the documented demo Nginx UI bridge: its initContainer retrieves a
     pinned public Object Storage release, while Envoy routes `/` to Nginx and
     `/api` to the API on one HTTP origin.

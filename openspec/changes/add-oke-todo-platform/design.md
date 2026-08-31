@@ -82,7 +82,9 @@ bootstrap procedure when its originating PAT expires.
 - The Todo database is a private Autonomous Database Serverless instance using
   the `ECPU` compute model with 2 ECPUs, 20 GB initial storage, and auto
   scaling disabled. Its private endpoint has a dedicated subnet and security
-  rules rather than a public database endpoint.
+  rules rather than a public database endpoint. The API uses the server-TLS
+  connection string on TCP `1521`; the NSG allows that port only from the OKE
+  pod CIDR. Port `1522` remains reserved for a future mTLS/wallet design.
 - The tenancy's existing OCI Vault is an external platform prerequisite because
   its Vault limit prevents creating an additional Vault. Crossplane declares
   the application-owned OCI resources; External Secrets Operator, installed by
@@ -97,3 +99,7 @@ bootstrap procedure when its originating PAT expires.
 - Each API replica maintains a lazy, one-connection `node-oracledb` pool
   (`poolMin: 0`, `poolMax: 1`). This avoids a per-request connection handshake
   while keeping aggregate ADB concurrency proportional to the replica count.
+- The Todo API image includes an idempotent database migration command. The
+  later API Deployment executes it as an initContainer using the same scoped
+  ESO-backed runtime secret; no manual SQL session is required for the initial
+  `todo_items` schema.
