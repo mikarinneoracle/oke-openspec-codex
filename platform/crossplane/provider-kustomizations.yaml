@@ -1,0 +1,69 @@
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-oci-runtime
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  path: ./platform/crossplane/oci-runtime
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-oci-family
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: crossplane-oci-runtime
+  interval: 10m0s
+  path: ./platform/crossplane/oci-family
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  timeout: 10m0s
+  wait: true
+  healthChecks:
+    - apiVersion: pkg.crossplane.io/v1
+      kind: Provider
+      name: oracle-provider-family-oci
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-oci-objectstorage
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: crossplane-oci-family
+  interval: 10m0s
+  path: ./platform/crossplane/oci-objectstorage
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  timeout: 10m0s
+  wait: true
+  healthChecks:
+    - apiVersion: pkg.crossplane.io/v1
+      kind: Provider
+      name: provider-oci-objectstorage
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: crossplane-oci-config
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: crossplane-oci-objectstorage
+  interval: 10m0s
+  path: ./platform/crossplane/oci-config
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system

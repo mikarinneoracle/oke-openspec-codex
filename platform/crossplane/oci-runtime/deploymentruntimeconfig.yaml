@@ -1,0 +1,26 @@
+apiVersion: pkg.crossplane.io/v1beta1
+kind: DeploymentRuntimeConfig
+metadata:
+  name: oci-workload-identity
+spec:
+  deploymentTemplate:
+    spec:
+      selector: {}
+      template:
+        spec:
+          containers:
+            - name: package-runtime
+              env:
+                - name: OCI_RESOURCE_PRINCIPAL_VERSION
+                  value: "2.2"
+                - name: OCI_RESOURCE_PRINCIPAL_REGION
+                  value: eu-frankfurt-1
+                - name: OCI_RESOURCE_PRINCIPAL_WORKLOAD_IDENTITY
+                  value: "1"
+          tolerations:
+            - key: CriticalAddonsOnly
+              operator: Exists
+              effect: NoSchedule
+  serviceAccountTemplate:
+    metadata:
+      name: crossplane-provider-oci

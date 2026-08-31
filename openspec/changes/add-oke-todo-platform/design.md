@@ -45,6 +45,10 @@ bootstrap procedure when its originating PAT expires.
 
 - Database connection details are supplied to the API only through runtime
   secret references; no secret values are committed.
+- The Crossplane OCI provider uses OKE Workload Identity through the
+  `crossplane-provider-oci` ServiceAccount. Terraform grants that workload only
+  Object Storage permissions in the project compartment, constrained to this
+  cluster and namespace; no OCI API key is stored in Git or Kubernetes.
 - Workload identity grants the UI release downloader read access only to its
   designated bucket/path.
 - API access uses the same public origin (`/api`) as the UI, avoiding a browser

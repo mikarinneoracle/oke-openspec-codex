@@ -1,0 +1,11 @@
+apiVersion: oci.m.upbound.io/v1beta1
+kind: ClusterProviderConfig
+metadata:
+  name: default
+spec:
+  credentials:
+    source: Secret
+    secretRef:
+      key: credentials
+      name: oci-creds
+      namespace: crossplane-system
