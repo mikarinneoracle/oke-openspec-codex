@@ -52,9 +52,12 @@ configuration. The command deliberately pipes the full bearer URL directly to
 GitHub CLI rather than printing it.
 
 The Actions workflow appends the selected immutable release path, for example
-`releases/<git-sha>/index.html`, to the stored base PAR URL. OCI returns the
-PAR access URI only when the request is created; if it is lost, create a new
-PAR and replace the GitHub Environment secret.
+`releases/<git-sha>/index.html`, to the stored base PAR URL. It also writes
+`releases/<git-sha>/bundle.tar.gz`: the clearly labelled, temporary Nginx demo
+bridge downloads that single public object and serves its extracted static
+files through Envoy Gateway. OCI returns the PAR access URI only when the
+request is created; if it is lost, create a new PAR and replace the GitHub
+Environment secret.
 
 ## Rotation and revocation
 

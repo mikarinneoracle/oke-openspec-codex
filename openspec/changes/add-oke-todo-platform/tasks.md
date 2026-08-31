@@ -108,8 +108,10 @@
     non-sensitive ConfigMap for the server-TLS connect string, and runs the
     idempotent schema migration as an initContainer.
   - [ ] Add the documented demo Nginx UI bridge: its initContainer retrieves a
-    pinned public Object Storage release, while Envoy routes `/` to Nginx and
-    `/api` to the API on one HTTP origin.
+    pinned public Object Storage `bundle.tar.gz` release, while Envoy routes
+    `/` to Nginx and `/api` to the API on one HTTP origin. The archive is
+    necessary because public bucket reads intentionally do not permit listing
+    the hashed Vite assets.
   - [ ] Clearly label the no-DNS/no-certificate HTTP bridge as demo-only. When
     DNS and TLS are available, replace it with direct HTTPS bucket/CDN UI
     delivery plus HTTPS API and scoped CORS.

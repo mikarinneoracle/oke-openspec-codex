@@ -13,7 +13,8 @@ GitHub Actions -> immutable Todo API image -> private OCIR repository
 ```
 
 The UI bucket provides anonymous object reads without object listing. It stores
-only immutable, versioned static UI releases; Crossplane owns the bucket and
+only immutable, versioned static UI releases. Each release also contains a
+single `bundle.tar.gz` for the no-list demo bridge; Crossplane owns the bucket and
 GitHub Actions can write only through its scoped write-PAR. It is not a
 developer working directory.
 

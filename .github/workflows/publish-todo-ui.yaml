@@ -43,6 +43,7 @@ jobs:
           npm ci
           npm run lint
           npm run build
+          tar -C dist -czf todo-ui-release.tar.gz .
 
       - name: Upload release through write-only PAR
         shell: bash
@@ -62,6 +63,11 @@ jobs:
               --header "Cache-Control: $cache_control" \
               "${OCI_TODO_UI_WRITE_PAR_URL}${RELEASE_PREFIX}/${relative_path}"
           done
+          curl --fail --silent --show-error --retry 3 \
+            --upload-file todo-ui-release.tar.gz \
+            --header 'Content-Type: application/gzip' \
+            --header 'Cache-Control: public, max-age=31536000, immutable' \
+            "${OCI_TODO_UI_WRITE_PAR_URL}${RELEASE_PREFIX}/bundle.tar.gz"
 
       - name: Publish release summary
         shell: bash
@@ -70,5 +76,6 @@ jobs:
             echo '## Todo UI release published'
             echo
             echo "- Release prefix: \`$RELEASE_PREFIX/\`"
+            echo "- Demo bridge archive: \`$RELEASE_PREFIX/bundle.tar.gz\`"
             echo '- API path: `/api` through the same-origin Envoy Gateway route'
           } >> "$GITHUB_STEP_SUMMARY"
