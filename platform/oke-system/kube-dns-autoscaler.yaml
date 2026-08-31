@@ -4,7 +4,15 @@ metadata:
   name: kube-dns-autoscaler
   namespace: kube-system
 spec:
+  # Flux validates this apply as a Deployment update, so retain the existing
+  # immutable selector and matching pod label.
+  selector:
+    matchLabels:
+      k8s-app: kube-dns-autoscaler
   template:
+    metadata:
+      labels:
+        k8s-app: kube-dns-autoscaler
     spec:
       # Retain OKE's preemptible-node toleration and add the dedicated
       # system-pool taint toleration. This is intentionally a narrow
