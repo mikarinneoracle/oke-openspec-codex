@@ -1,3 +1,7 @@
+# OKE OpenSpec Todo Platform
+
+## Platform architecture
+
 <pre style="font-family: 'Courier New', Courier, monospace;">
 
        ┌────────────────────────────────────────────────────────┐
@@ -51,6 +55,8 @@
                          └──────────────────────────┘
 </pre>
 
+## UI artifact publishing
+
 GitHub Actions publishes UI artifacts to Object Storage through an expiring,
 write-only PAR URL restricted to the `releases/` prefix. The URL is stored only
 as a protected GitHub Environment Secret; Flux remains the only actor that
@@ -61,6 +67,8 @@ the write PAR are documented in
 [`docs/runbooks/create-ui-write-par.md`](docs/runbooks/create-ui-write-par.md).
 The corresponding CLI instructions for OCIR Actions authentication are in
 [`docs/runbooks/configure-ocir-actions-secrets.md`](docs/runbooks/configure-ocir-actions-secrets.md).
+
+## Todo application runtime
 
 <pre style="font-family: 'Courier New', Courier, monospace;">
 
@@ -80,10 +88,14 @@ The corresponding CLI instructions for OCIR Actions authentication are in
           [ Scoped Kubernetes Secrets ] ───► Todo API / Crossplane
 </pre>
 
+## Temporary HTTP demo bridge
+
 Nginx is a temporary demo bridge because no public DNS name or TLS certificate
 is available. It gives the browser one HTTP origin for the UI and the `/api`
 route. In production, replace it with direct HTTPS Object Storage/CDN delivery
 and an HTTPS API origin.
+
+## Karpenter workload nodes
 
 Karpenter-created workload nodes appear in the OCI Console as Compute
 instances and in Kubernetes as Nodes and NodeClaims. They do not appear as
