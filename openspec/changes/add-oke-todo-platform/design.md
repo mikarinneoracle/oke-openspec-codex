@@ -25,6 +25,9 @@ credentials, an OCI Workload Identity, or a listing operation. Gateway API
 routes `/api` to the Todo API Service and `/` to the Nginx Service, giving the
 browser one HTTP demo origin.
 
+OKE's CRI-O enforces fully-qualified public image names. The bridge therefore
+uses `docker.io/nginxinc/nginx-unprivileged`, not an ambiguous short image name.
+
 ## Reconciliation and ownership
 
 ```text
