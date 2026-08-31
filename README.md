@@ -51,15 +51,15 @@
                          └──────────────────────────┘
 </pre>
 
-UI-artefaktit julkaistaan GitHub Actionsista Object Storageen määräaikaisella,
-vain `releases/`-prefiksiin rajatulla write-PAR-URL:lla. URL säilytetään vain
-suojattuna GitHub Environment Secretinä; Flux on edelleen ainoa Kubernetesiin
-kirjoittava toimija. Selain lataa versionoidun staattisen UI-releasen suoraan
-Object Storage -bucketista, jossa object-read on julkinen mutta listaus estetty.
-Write-PARin manuaalinen OCI CLI -luonti, GitHub Environment -tallennus ja
-rotaatio on kuvattu tiedostossa
+GitHub Actions publishes UI artifacts to Object Storage through an expiring,
+write-only PAR URL restricted to the `releases/` prefix. The URL is stored only
+as a protected GitHub Environment Secret; Flux remains the only actor that
+writes to Kubernetes. The browser loads the versioned static UI release
+directly from an Object Storage bucket with public object reads and disabled
+listing. Manual OCI CLI creation, GitHub Environment storage, and rotation of
+the write PAR are documented in
 [`docs/runbooks/create-ui-write-par.md`](docs/runbooks/create-ui-write-par.md).
-OCIR Actions -kirjautumisen vastaava CLI-ohje on
+The corresponding CLI instructions for OCIR Actions authentication are in
 [`docs/runbooks/configure-ocir-actions-secrets.md`](docs/runbooks/configure-ocir-actions-secrets.md).
 
 <pre style="font-family: 'Courier New', Courier, monospace;">
@@ -80,7 +80,12 @@ OCIR Actions -kirjautumisen vastaava CLI-ohje on
           [ Scoped Kubernetes Secrets ] ───► Todo API / Crossplane
 </pre>
 
-Nginx on väliaikainen demo-bridge, koska käytettävissä ei ole julkista DNS-nimeä
-ja TLS-sertifikaattia. Se antaa selaimelle saman HTTP-originin UI:lle ja
-`/api`-reitille. Tuotannossa se korvataan suoralla HTTPS Object Storage/CDN
--toimituksella ja HTTPS API -originilla.
+Nginx is a temporary demo bridge because no public DNS name or TLS certificate
+is available. It gives the browser one HTTP origin for the UI and the `/api`
+route. In production, replace it with direct HTTPS Object Storage/CDN delivery
+and an HTTPS API origin.
+
+Karpenter-created workload nodes appear in the OCI Console as Compute
+instances and in Kubernetes as Nodes and NodeClaims. They do not appear as
+members of an OKE Console managed node pool because Karpenter creates the
+instances directly; this is expected behavior.
