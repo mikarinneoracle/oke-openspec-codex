@@ -156,6 +156,11 @@
     reviewable pull request that changes only the pinned release SHA. It must
     not write to Kubernetes or bypass the Git review and Flux reconciliation
     boundary.
+  - [ ] Add the production alternative to serve the UI directly from Object
+    Storage or a CDN after public DNS and TLS are available. Define a reviewed
+    active-release promotion mechanism (custom-domain/CDN route or equivalent)
+    that switches between immutable `releases/<git-sha>/` versions without an
+    OKE UI bridge, and configure the HTTPS API origin plus scoped CORS.
 - [x] Publish Todo API images to the Crossplane-managed OCIR repository at
   `fra.ocir.io` through the protected `ocir-publish` GitHub Environment.
   - [x] Install the OCI Artifacts Crossplane provider through Flux and declare
