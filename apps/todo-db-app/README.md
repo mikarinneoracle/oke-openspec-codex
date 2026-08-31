@@ -2,9 +2,10 @@
 
 React/Vite-käyttöliittymä OKE OpenSpec -esimerkkiprojektille.
 
-Tässä tuontivaiheessa tehtävät ovat vielä selaimen paikallisessa tilassa. Seuraava
-vaihe korvaa tietolähteen saman originin REST API -kutsuilla (`/api`), jolloin
-Node.js-palvelu käyttää Oracle-tietokantaa.
+Käyttöliittymä hakee ja muuttaa tehtäviä saman originin REST API -kutsuilla
+(`GET`, `POST`, `PATCH` ja `DELETE /api/tasks`). Envoy Gateway reitittää
+`/`-pyynnöt UI:lle ja `/api`-pyynnöt Node.js-palvelulle, joka käyttää Oracle
+Autonomous Databasea. Selain ei koskaan saa tietokantayhteystietoja.
 
 ## Local development
 
