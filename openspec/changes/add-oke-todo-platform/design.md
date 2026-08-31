@@ -72,11 +72,13 @@ bootstrap procedure when its originating PAT expires.
   environment holds only a write-only, expiry-bound PAR URL limited to the UI
   artefact `releases/` prefix; it must not be used by browser or UI runtime.
 - The Todo API image is published from the protected `ocir-publish` GitHub
-  Environment to the private, immutable Crossplane-managed OCIR repository at
+  Environment to the private Crossplane-managed OCIR repository at
   `fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api`. The workflow uses an
   OCI auth token limited to that repository and has no Kubernetes credentials.
-  OKE image-pull secret automation and image signing are intentionally optional
-  for the initial demo.
+  Releases use unique Git SHA tags and the workflow never overwrites a tag,
+  because OCI Artifacts does not currently support enforcing `isImmutable` when
+  creating this repository. OKE image-pull secret automation and image signing
+  are intentionally optional for the initial demo.
 - The Todo database is a private Autonomous Database Serverless instance using
   the `ECPU` compute model with 2 ECPUs, 20 GB initial storage, and auto
   scaling disabled. Its private endpoint has a dedicated subnet and security

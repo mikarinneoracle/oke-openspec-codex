@@ -45,4 +45,6 @@ oci iam policy get \
 
 After the policy is effective, commit the OCI Artifacts provider and
 `ContainerRepository` manifests. Flux installs the provider, then Crossplane
-creates the private immutable `oke-openspec-codex/todo-api` repository.
+creates the private `oke-openspec-codex/todo-api` repository. Releases are
+immutable by convention through unique Git SHA tags: OCI Artifacts does not
+currently support enforcing `isImmutable` when creating this repository.

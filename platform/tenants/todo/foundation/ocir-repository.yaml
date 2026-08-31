@@ -10,9 +10,6 @@ spec:
   forProvider:
     compartmentId: ocid1.compartment.oc1..aaaaaaaawccfklp2wj4c5ymigrkjfdhcbcm3u5ripl2whnznhmvgiqdatqgq
     displayName: oke-openspec-codex/todo-api
-    # SHA tags are immutable release references; overwriting a published API
-    # image would make a GitOps deployment non-reproducible.
-    isImmutable: true
     isPublic: false
   providerConfigRef:
     name: default

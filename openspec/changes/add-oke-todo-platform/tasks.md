@@ -117,12 +117,14 @@
 - [ ] Publish Todo API images to the Crossplane-managed OCIR repository at
   `fra.ocir.io` through the protected `ocir-publish` GitHub Environment.
   - [ ] Install the OCI Artifacts Crossplane provider through Flux and declare
-    the private, immutable `oke-openspec-codex/todo-api` repository in the
-    `mika.rinne` compartment. Crossplane needs `manage repos in compartment`
-    in addition to its existing least-privilege OCI policy before it can create
-    the repository. Apply and verify that one-time post-bootstrap policy change
-    with `docs/runbooks/grant-crossplane-ocir-repository-access.md`; do not
-    update Terraform.
+    the private `oke-openspec-codex/todo-api` repository in the `mika.rinne`
+    compartment. Releases use unique Git SHA tags and the workflow never
+    overwrites a tag; OCI Artifacts does not currently support enforcing
+    `isImmutable` when creating this repository. Crossplane needs `manage repos
+    in compartment` in addition to its existing least-privilege OCI policy.
+    Apply and verify that one-time post-bootstrap policy change with
+    `docs/runbooks/grant-crossplane-ocir-repository-access.md`; do not update
+    Terraform.
   - [x] Store `OCI_REGISTRY_USERNAME` and `OCI_REGISTRY_AUTH_TOKEN` using the
     manual CLI procedure in `docs/runbooks/configure-ocir-actions-secrets.md`.
   - [ ] Keep OKE OCIR image-pull secret automation and image signing optional;
