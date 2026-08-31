@@ -54,7 +54,6 @@ metadata:
     app.kubernetes.io/name: todo-api
     app.kubernetes.io/part-of: todo-db-app
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: todo-api

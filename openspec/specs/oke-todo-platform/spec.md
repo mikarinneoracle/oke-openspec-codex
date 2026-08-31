@@ -26,6 +26,9 @@ and Oracle Autonomous Database persistence.
   CPU utilization target. Karpenter provisions workload nodes only for
   HPA-created pods that cannot be scheduled; the current NodePool ceiling is
   four 1-OCPU/8-GB nodes.
+- The Todo API Deployment does not declare `spec.replicas`; HPA is the sole
+  replica-count owner, while Flux manages all other Deployment fields. This
+  preserves HPA scale-up and its five-minute scale-down stabilization.
 - The documented capacity experiment starts from the normal one-replica HPA
   floor. Loader.io traffic must exceed the CPU target before HPA creates pods;
   Karpenter only provisions nodes when those HPA-created pods cannot be

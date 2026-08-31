@@ -38,6 +38,11 @@ grow by up to 100% or four pods per minute, then waits five minutes before
 gradually scaling down. The 20-replica limit also caps the initial worst-case
 database concurrency at 20 lazy `node-oracledb` connections.
 
+The API Deployment deliberately omits `spec.replicas`. HPA is the sole owner
+of the replica count; Flux owns the remaining Deployment fields. This prevents
+each Flux reconciliation from resetting an HPA scale-up to a static replica
+count and preserves the configured five-minute scale-down stabilization.
+
 The capacity test starts from the normal one-replica floor; it does not
 pre-provision API capacity. Loader.io traffic must raise CPU utilization above
 the HPA target before HPA creates additional API pods. Karpenter then adds

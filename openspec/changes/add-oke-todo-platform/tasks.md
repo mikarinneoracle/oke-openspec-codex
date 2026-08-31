@@ -43,10 +43,12 @@
     HPA replica growth, pod placement, and any NodeClaims/nodes, and record the
     HPA, pod, node, and request-result observations. This validates the
     load-driven HPA-to-Karpenter path without pre-provisioning excess replicas.
-  - [ ] Seed the Todo table through Flux with 1,000 idempotent English
+  - [x] Seed the Todo table through Flux with 1,000 idempotent English
     load-test rows. The seed Job uses the existing API image and scoped
     ESO-delivered runtime secret, has no OCI identity, and never stores a
     credential in Git.
+  - [x] Remove the static API Deployment replica count so HPA is the sole
+    replica-count owner and Flux cannot reset an HPA scale-up.
   - [ ] Remove the temporary public Loader.io HTTP verification route from the
     Nginx demo bridge after the experiment is complete.
 
