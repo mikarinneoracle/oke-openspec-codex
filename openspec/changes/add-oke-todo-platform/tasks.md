@@ -156,6 +156,11 @@
     and production build. Add a PR template that records the change summary,
     local preview browser test, successful immutable build SHA, promotion SHA,
     and rollback SHA before a release-promotion PR is approved.
+  - [x] Add the demo-only post-promotion data reset: the promotion script
+    updates a release-specific Flux Job, which waits for the same application
+    revision to be Ready, deletes all Todo rows, and inserts 1,000 deterministic
+    test rows. Keep the completed Job until it is replaced by the next release;
+    do not configure TTL cleanup.
   - [ ] Optionally automate UI promotion by having GitHub Actions open a
     reviewable pull request that changes only the pinned release SHA. It must
     not write to Kubernetes or bypass the Git review and Flux reconciliation

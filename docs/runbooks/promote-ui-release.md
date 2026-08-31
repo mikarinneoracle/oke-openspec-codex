@@ -61,7 +61,9 @@ sh scripts/promote-ui-release.sh <git-sha>
 ```
 
 The script does not commit, push, contact OCI Object Storage, or use Kubernetes
-credentials. Review its resulting diff before completing the promotion:
+credentials. It changes the UI bridge pin and the release-specific demo reset
+Job name and version label together. Review its resulting diff before
+completing the promotion:
 
 1. Confirm that `UI_RELEASE_BUNDLE_URL` refers to:
 
@@ -79,6 +81,11 @@ credentials. Review its resulting diff before completing the promotion:
    the pinned public archive and the Gateway API route continues serving `/`
    from the new release.
 
+4. When the same Git revision of the application Kustomization is Ready, Flux
+   runs the release-specific demo reset Job. It deletes all `todo_items` rows
+   and inserts the deterministic 1,000-row demo dataset. This is deliberately
+   destructive and is appropriate only for this demo environment.
+
 ## Verify
 
 Use only read-only cluster inspection after Flux has reconciled:
@@ -89,9 +96,9 @@ kubectl get pods -n todo-app -l app.kubernetes.io/name=todo-ui-bridge
 kubectl get deployment -n todo-app todo-ui-bridge
 ```
 
-Confirm that the new bridge pod is Ready, then load the existing demo endpoint
-in a browser. Do not use `kubectl apply`, `kubectl rollout`, or any direct
-cluster mutation.
+Confirm that the new bridge pod is Ready and the `todo-demo-reset-<short-sha>`
+Job is `Completed`, then load the existing demo endpoint in a browser. Do not
+use `kubectl apply`, `kubectl rollout`, or any direct cluster mutation.
 
 ## Roll back
 

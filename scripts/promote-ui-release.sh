@@ -10,9 +10,15 @@ set -euo pipefail
 
 repository_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 manifest="$repository_root/platform/tenants/todo/application/todo-ui-bridge.yaml"
+reset_manifest="$repository_root/platform/tenants/todo/demo-reset/todo-demo-reset.yaml"
 
 if [[ ! -f "$manifest" ]]; then
   echo "Todo UI bridge manifest not found: $manifest" >&2
+  exit 1
+fi
+
+if [[ ! -f "$reset_manifest" ]]; then
+  echo "Todo demo reset manifest not found: $reset_manifest" >&2
   exit 1
 fi
 
@@ -56,6 +62,14 @@ fi
 
 current_release="$(grep -Eo 'releases/[0-9a-f]{40}/bundle\.tar\.gz' "$manifest")"
 target_release="releases/$release_sha/bundle.tar.gz"
+release_short_sha="${release_sha:0:8}"
+reset_job_name_count="$(grep -Eo 'todo-demo-reset-[0-9a-f]{8}' "$reset_manifest" | wc -l | tr -d ' ')"
+reset_version_count="$(grep -Eo 'app.kubernetes.io/version: "[0-9a-f]{40}"' "$reset_manifest" | wc -l | tr -d ' ')"
+
+if [[ "$reset_job_name_count" != "1" || "$reset_version_count" != "1" ]]; then
+  echo "Expected one release-specific demo reset Job name and version label." >&2
+  exit 1
+fi
 
 if [[ "$current_release" == "$target_release" ]]; then
   echo "The bridge already uses $target_release."
@@ -63,9 +77,13 @@ if [[ "$current_release" == "$target_release" ]]; then
 fi
 
 perl -0pi -e "s{\Q$current_release\E}{$target_release}" "$manifest"
+perl -0pi -e "s{todo-demo-reset-[0-9a-f]{8}}{todo-demo-reset-$release_short_sha}" "$reset_manifest"
+perl -0pi -e "s{app\.kubernetes\.io/version: \"[0-9a-f]{40}\"}{app.kubernetes.io/version: \"$release_sha\"}" "$reset_manifest"
 
 echo "Promoted UI release reference:"
 echo "  $current_release"
 echo "  -> $target_release"
+echo "Demo reset Job: todo-demo-reset-$release_short_sha"
 echo
-echo "Review the Git diff, then commit and push. Flux will perform the bridge rollout."
+echo "Review the Git diff, then commit and push. Flux will roll out the bridge"
+echo "and run the release-specific demo reset Job after the application is Ready."

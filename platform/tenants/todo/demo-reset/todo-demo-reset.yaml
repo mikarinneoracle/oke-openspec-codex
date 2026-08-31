@@ -1,0 +1,113 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todo-demo-reset
+  namespace: todo-app
+  labels:
+    app.kubernetes.io/name: todo-api
+    app.kubernetes.io/part-of: todo-db-app
+    app.kubernetes.io/component: demo-data-reset
+data:
+  reset.js: |
+    import { readFile } from 'node:fs/promises';
+    import { closePool, withConnection } from '/app/src/database.js';
+
+    try {
+      const statement = await readFile('/app/reset/reset-tasks.sql', 'utf8');
+      await withConnection((connection) => connection.execute(statement.trim()));
+      console.log('Reset the demo Todo data to 1,000 deterministic rows.');
+    } finally {
+      await closePool();
+    }
+  reset-tasks.sql: |
+    DECLARE
+      TYPE text_list IS TABLE OF VARCHAR2(80);
+      actions text_list := text_list(
+        'Review', 'Prepare', 'Update', 'Test', 'Document', 'Schedule',
+        'Organize', 'Confirm', 'Design', 'Investigate', 'Share', 'Complete'
+      );
+      subjects text_list := text_list(
+        'project documentation', 'release checklist', 'database report',
+        'team meeting notes', 'security review', 'customer feedback',
+        'deployment plan', 'API contract', 'monitoring dashboard',
+        'backup procedure', 'performance experiment', 'support request'
+      );
+      item_number PLS_INTEGER;
+    BEGIN
+      DELETE FROM todo_items;
+
+      FOR item_number IN 1..1000 LOOP
+        INSERT INTO todo_items (id, title, completed)
+        VALUES (
+          'load-test-' || TO_CHAR(item_number, 'FM0000'),
+          actions(MOD(item_number - 1, actions.COUNT) + 1) || ' ' ||
+            subjects(MOD(item_number - 1, subjects.COUNT) + 1) || ' #' ||
+            TO_CHAR(item_number),
+          CASE WHEN MOD(item_number, 3) = 0 THEN 1 ELSE 0 END
+        );
+      END LOOP;
+
+      COMMIT;
+    END;
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  # The promotion script changes this name for every release. A completed Job
+  # must remain in place; TTL cleanup would make Flux recreate it repeatedly.
+  name: todo-demo-reset-97d2b273
+  namespace: todo-app
+  labels:
+    app.kubernetes.io/name: todo-api
+    app.kubernetes.io/part-of: todo-db-app
+    app.kubernetes.io/component: demo-data-reset
+    app.kubernetes.io/version: "97d2b273bf5385e617c132eb2ed5e646102da885"
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: todo-demo-reset
+        app.kubernetes.io/part-of: todo-db-app
+    spec:
+      restartPolicy: Never
+      serviceAccountName: todo-api
+      imagePullSecrets:
+        - name: todo-ocir-pull
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: reset
+          image: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:de19dd532a1ef35d1547fe4c67a6433b0ee453f0
+          imagePullPolicy: IfNotPresent
+          command: [node, /app/reset/reset.js]
+          envFrom:
+            - configMapRef:
+                name: todo-api-runtime
+            - secretRef:
+                name: todo-adb-runtime
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          volumeMounts:
+            - name: reset
+              mountPath: /app/reset
+              readOnly: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+      volumes:
+        - name: reset
+          configMap:
+            name: todo-demo-reset
+            defaultMode: 0444

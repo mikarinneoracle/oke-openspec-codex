@@ -33,6 +33,14 @@ then Flux performs the rolling replacement. This provides an auditable rollback
 to any previously published release. The exact procedure is documented in
 `docs/runbooks/promote-ui-release.md`.
 
+This demo intentionally resets application data after every promoted release.
+The promotion script changes a release-specific Flux Job name together with the
+UI release pin. Flux waits for the same source revision of the application to
+be Ready, then the Job deletes all `todo_items` data and inserts a deterministic
+1,000-row dataset. The Job remains completed until the next release-specific
+Job replaces it; it must not use TTL cleanup, which would cause Flux to recreate
+it. This destructive policy is demo-only and must not be copied to production.
+
 OKE's CRI-O enforces fully-qualified public image names. The bridge therefore
 uses `docker.io/nginxinc/nginx-unprivileged`, not an ambiguous short image name.
 
