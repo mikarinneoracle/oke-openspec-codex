@@ -4,7 +4,7 @@ metadata:
   name: crossplane-oci-runtime
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 1m0s
   path: ./platform/crossplane/oci-runtime
   prune: true
   sourceRef:
@@ -19,7 +19,7 @@ metadata:
 spec:
   dependsOn:
     - name: crossplane-oci-runtime
-  interval: 10m0s
+  interval: 1m0s
   path: ./platform/crossplane/oci-family
   prune: true
   sourceRef:
@@ -40,7 +40,7 @@ metadata:
 spec:
   dependsOn:
     - name: crossplane-oci-family
-  interval: 10m0s
+  interval: 1m0s
   path: ./platform/crossplane/oci-database
   prune: true
   sourceRef:
@@ -61,7 +61,7 @@ metadata:
 spec:
   dependsOn:
     - name: crossplane-oci-family
-  interval: 10m0s
+  interval: 1m0s
   path: ./platform/crossplane/oci-objectstorage
   prune: true
   sourceRef:
@@ -82,7 +82,7 @@ metadata:
 spec:
   dependsOn:
     - name: crossplane-oci-family
-  interval: 10m0s
+  interval: 1m0s
   path: ./platform/crossplane/oci-networking
   prune: true
   sourceRef:
@@ -103,7 +103,7 @@ metadata:
 spec:
   dependsOn:
     - name: crossplane-oci-family
-  interval: 10m0s
+  interval: 1m0s
   path: ./platform/crossplane/oci-kms
   prune: true
   sourceRef:
@@ -127,7 +127,7 @@ spec:
     - name: crossplane-oci-database
     - name: crossplane-oci-networking
     - name: crossplane-oci-kms
-  interval: 10m0s
+  interval: 1m0s
   path: ./platform/crossplane/oci-config
   prune: true
   sourceRef:

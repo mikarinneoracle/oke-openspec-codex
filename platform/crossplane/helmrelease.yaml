@@ -4,7 +4,7 @@ metadata:
   name: crossplane
   namespace: crossplane-system
 spec:
-  interval: 10m0s
+  interval: 1m0s
   chart:
     spec:
       chart: crossplane
