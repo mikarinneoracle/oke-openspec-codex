@@ -1,0 +1,33 @@
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: todo-workload
+spec:
+  template:
+    metadata:
+      labels:
+        workload.oke-openspec-codex.io/tier: application
+    spec:
+      expireAfter: Never
+      nodeClassRef:
+        group: oci.oraclecloud.com
+        kind: OCINodeClass
+        name: todo-workload
+      requirements:
+        - key: karpenter.sh/capacity-type
+          operator: In
+          values:
+            - on-demand
+        - key: oci.oraclecloud.com/instance-shape
+          operator: In
+          values:
+            - VM.Standard.E5.Flex
+      terminationGracePeriod: 2h
+  disruption:
+    budgets:
+      - nodes: 10%
+    consolidateAfter: 10m
+    consolidationPolicy: WhenEmpty
+  limits:
+    cpu: "4"
+    memory: 32Gi

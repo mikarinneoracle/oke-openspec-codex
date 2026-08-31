@@ -41,5 +41,20 @@
 - [ ] Define and approve the one-time Flux bootstrap handoff.
 - [ ] Add KPO, `OCINodeClass`, dynamic NodePool, and system-component placement
   manifests to the Flux platform layer.
+  - KPO runs as `karpenter/karpenter`, constrained by OKE Workload Identity to
+    this cluster. Its policy permits `manage instance-family`, `manage
+    volumes`, `manage volume-attachments`, `manage virtual-network-family`,
+    and `inspect compartments` only in the `mika.rinne` compartment. These are
+    the provider's documented base permissions for node launch, VNIC and boot
+    volume lifecycle; no optional spot, reservation, placement-group, or
+    defined-tag permissions are granted.
+  - A dedicated dynamic group matches compute instances in `mika.rinne`. Its
+    `CLUSTER_JOIN` policy is restricted to this OKE cluster OCID, allowing
+    Karpenter-created nodes to join this cluster but no other cluster.
+  - The dynamic `todo-workload` NodePool uses only on-demand
+    `VM.Standard.E5.Flex` nodes with 1 OCPU and 8 GB per node, a 4-OCPU total
+    limit, and OCI VCN-native secondary VNIC pod networking. It consolidates
+    empty capacity after ten minutes. No static floor, spot capacity, or
+    additional optional KPO feature is enabled.
 - [ ] Add an optional Git-managed static Karpenter NodePool only when a manual
   capacity floor is needed.

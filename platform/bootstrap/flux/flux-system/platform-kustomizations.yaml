@@ -41,6 +41,40 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: karpenter-core
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: envoy-gateway
+  interval: 1m0s
+  path: ./platform/karpenter/core
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  timeout: 10m0s
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: karpenter-capacity
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: karpenter-core
+  interval: 1m0s
+  path: ./platform/karpenter/capacity
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  timeout: 10m0s
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: todo-foundation
   namespace: flux-system
 spec:

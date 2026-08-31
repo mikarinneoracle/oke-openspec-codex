@@ -1,0 +1,27 @@
+apiVersion: oci.oraclecloud.com/v1beta1
+kind: OCINodeClass
+metadata:
+  name: todo-workload
+spec:
+  shapeConfigs:
+    - ocpus: 1
+      memoryInGbs: 8
+  volumeConfig:
+    bootVolumeConfig:
+      imageConfig:
+        imageType: OKEImage
+        imageFilter:
+          osFilter: Oracle Linux
+          osVersionFilter: "9"
+  networkConfig:
+    primaryVnicConfig:
+      subnetConfig:
+        subnetId: ocid1.subnet.oc1.eu-frankfurt-1.aaaaaaaaupdfan3y5lnj2dycwrs4ufnifqoniicyzkj4ah6msur2sgj3qcva
+      networkSecurityGroupConfigs:
+        - networkSecurityGroupId: ocid1.networksecuritygroup.oc1.eu-frankfurt-1.aaaaaaaayu6e7mkopjpiw336o7bxqhcodadzyfjcj7wacdesxdmey53zoehq
+    secondaryVnicConfigs:
+      - subnetConfig:
+          subnetId: ocid1.subnet.oc1.eu-frankfurt-1.aaaaaaaahfpl6go64infeeafxkht54i2jgccm4dv5bd3tavk246foevr2pta
+        networkSecurityGroupConfigs:
+          - networkSecurityGroupId: ocid1.networksecuritygroup.oc1.eu-frankfurt-1.aaaaaaaaahwuko5mt5limihae7vsmkutbfr4vjehhewpqtaeqyd7ftpilxmq
+        ipCount: 8
