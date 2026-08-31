@@ -1,6 +1,4 @@
-# OKE OpenSpec Todo Platform
-
-## GitOps architecture
+# GitOps Todo Platform on OKE
 
 ![GitOps Todo Platform on OKE architecture illustration](docs/assets/gitops-todo-platform-oke.png)
 
