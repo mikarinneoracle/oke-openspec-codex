@@ -38,15 +38,23 @@ grow by up to 100% or four pods per minute, then waits five minutes before
 gradually scaling down. The 20-replica limit also caps the initial worst-case
 database concurrency at 20 lazy `node-oracledb` connections.
 
-For the documented Loader.io/Karpenter capacity experiment, Git temporarily
-raises the HPA floor to ten replicas. This is a deliberate scheduling test, not
-evidence of CPU-driven HPA scale-up: Flux creates ten API pods, and Karpenter
-adds workload capacity only if the scheduler cannot place them on existing
-nodes. Each replica can create at most one lazy ADB connection when it receives
-traffic. During the test, record the HPA, pod placement, NodeClaims/nodes, and
-Loader.io result. Afterwards, restore `minReplicas: 1` through Git; the HPA's
-five-minute scale-down stabilization and Karpenter's empty-node consolidation
-then return capacity gradually.
+The capacity test starts from the normal one-replica floor; it does not
+pre-provision API capacity. Loader.io traffic must raise CPU utilization above
+the HPA target before HPA creates additional API pods. Karpenter then adds
+workload capacity only if the scheduler cannot place those HPA-created pods on
+existing nodes. Each replica can create at most one lazy ADB connection when it
+receives traffic. Record the HPA, pod placement, NodeClaims/nodes, and
+Loader.io result during the test. Afterwards, the HPA's five-minute scale-down
+stabilization and Karpenter's empty-node consolidation return capacity
+gradually.
+
+Before the load-driven phase, a one-time Flux Job seeds 1,000 deterministic-ID
+English Todo rows. It uses the existing API image, the scoped ESO-delivered
+database runtime secret, and an idempotent Oracle `MERGE`; rerunning it does
+not create duplicate rows. The API currently returns the complete Todo list,
+so this data increases database read work, Node.js JSON serialization, and
+response transfer for `GET /api/tasks`. HPA still reacts only to container CPU,
+not database I/O or response size.
 
 Karpenter does not react to HTTP traffic directly. It provisions an additional
 workload node only when the HPA-created API pods cannot be scheduled from their

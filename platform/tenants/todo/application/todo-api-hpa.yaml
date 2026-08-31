@@ -11,9 +11,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: todo-api
-  # Temporary GitOps-controlled floor for the Loader.io/Karpenter capacity
-  # experiment. Restore this to 1 after recording the test observations.
-  minReplicas: 10
+  # Keep no excess API capacity before a load-driven HPA/Karpenter experiment.
+  minReplicas: 1
   maxReplicas: 20
   metrics:
     - type: Resource

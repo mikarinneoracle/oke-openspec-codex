@@ -1,0 +1,119 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todo-load-seed
+  namespace: todo-app
+  labels:
+    app.kubernetes.io/name: todo-api
+    app.kubernetes.io/part-of: todo-db-app
+    app.kubernetes.io/component: load-test-data
+data:
+  seed.js: |
+    import { readFile } from 'node:fs/promises';
+    import { closePool, withConnection } from '/app/src/database.js';
+
+    async function seed() {
+      const statement = await readFile('/app/seed/seed-tasks.sql', 'utf8');
+      await withConnection((connection) => connection.execute(statement.trim()));
+      console.log('Verified 1,000 idempotent English load-test Todo rows.');
+    }
+
+    try {
+      await seed();
+    } finally {
+      await closePool();
+    }
+  seed-tasks.sql: |
+    DECLARE
+      TYPE text_list IS TABLE OF VARCHAR2(80);
+      actions text_list := text_list(
+        'Review', 'Prepare', 'Update', 'Test', 'Document', 'Schedule',
+        'Organize', 'Confirm', 'Design', 'Investigate', 'Share', 'Complete'
+      );
+      subjects text_list := text_list(
+        'project documentation', 'release checklist', 'database report',
+        'team meeting notes', 'security review', 'customer feedback',
+        'deployment plan', 'API contract', 'monitoring dashboard',
+        'backup procedure', 'performance experiment', 'support request'
+      );
+      v_action VARCHAR2(80);
+      v_subject VARCHAR2(80);
+    BEGIN
+      FOR item_number IN 1..1000 LOOP
+        v_action := actions(TRUNC(DBMS_RANDOM.VALUE(1, actions.COUNT + 1)));
+        v_subject := subjects(TRUNC(DBMS_RANDOM.VALUE(1, subjects.COUNT + 1)));
+
+        MERGE INTO todo_items target
+        USING (
+          SELECT
+            'load-test-' || TO_CHAR(item_number, 'FM0000') AS id,
+            v_action || ' ' || v_subject || ' #' || TO_CHAR(item_number) AS title,
+            CASE WHEN DBMS_RANDOM.VALUE(0, 1) < 0.35 THEN 1 ELSE 0 END AS completed
+          FROM dual
+        ) source
+        ON (target.id = source.id)
+        WHEN NOT MATCHED THEN
+          INSERT (id, title, completed)
+          VALUES (source.id, source.title, source.completed);
+      END LOOP;
+      COMMIT;
+    END;
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: todo-load-seed
+  namespace: todo-app
+  labels:
+    app.kubernetes.io/name: todo-api
+    app.kubernetes.io/part-of: todo-db-app
+    app.kubernetes.io/component: load-test-data
+spec:
+  backoffLimit: 0
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: todo-load-seed
+        app.kubernetes.io/part-of: todo-db-app
+    spec:
+      restartPolicy: Never
+      serviceAccountName: todo-api
+      imagePullSecrets:
+        - name: todo-ocir-pull
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: seed
+          image: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:de19dd532a1ef35d1547fe4c67a6433b0ee453f0
+          imagePullPolicy: IfNotPresent
+          command: [node, /app/seed/seed.js]
+          envFrom:
+            - configMapRef:
+                name: todo-api-runtime
+            - secretRef:
+                name: todo-adb-runtime
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          volumeMounts:
+            - name: seed
+              mountPath: /app/seed
+              readOnly: true
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
+      volumes:
+        - name: seed
+          configMap:
+            name: todo-load-seed
+            defaultMode: 0444
