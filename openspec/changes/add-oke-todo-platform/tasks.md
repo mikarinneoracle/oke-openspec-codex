@@ -40,6 +40,8 @@
   API availability and HPA status before starting the external load test.
   - [ ] Remove the temporary public Loader.io HTTP verification route from the
     Nginx demo bridge after the experiment is complete.
+  - [ ] Remove the temporary Envoy HTTP/1.0 compatibility policy and public IP
+    listener hostname after the Loader.io experiment is complete.
 
 - [x] Import the Todo UI source under `apps/todo-db-app/`.
 - [x] Implement the Node.js REST API and its `node-oracledb` persistence.

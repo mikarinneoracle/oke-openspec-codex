@@ -9,6 +9,9 @@ spec:
     - name: http
       protocol: HTTP
       port: 80
+      # This no-DNS demo is accessed through the public load balancer IP.
+      # It also gives HTTP/1.0 compatibility a deterministic default Host.
+      hostname: 79.76.119.39
       allowedRoutes:
         namespaces:
           from: All

@@ -44,6 +44,13 @@ CPU or memory requests. The current `todo-workload` NodePool permits at most
 four 1-OCPU/8-GB nodes; any higher load-test target requires an explicit review
 of both that capacity limit and the ADB session limit.
 
+For the temporary Loader.io experiment, the public no-DNS HTTP listener also
+has a narrow Envoy `ClientTrafficPolicy` that enables HTTP/1.0 and injects the
+listener's explicit IP hostname for requests with no `Host` header. This is
+needed for the test client, not for the browser or Todo API. Remove it together
+with the temporary Loader.io verification route after testing; the future DNS
+and TLS design remains HTTP/1.1+/HTTPS.
+
 ## Reconciliation and ownership
 
 ```text
