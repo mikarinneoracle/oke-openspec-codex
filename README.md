@@ -33,13 +33,37 @@
        │                              │                         │
        │        ┌─────────────────────┼─────────────────────┐   │
        │        ▼                     ▼                     ▼   │
-       │   [ Karpenter ]       [ Gateway API ]       [ Crossplane ]
-       │   (Compute Nodes)     (Traffic Routes)      (OCI Infra)
-       │                                                    │
-       │                                                    ▼   │
-       │                                          ┌──────────────────┐
-       │                                          │  OCI Cloud API   │
-       │                                          │ ──► Autonomous DB│
-       │                                          │ ──► OS Bucket    │
-       │                                          └──────────────────┘
+       │   [ Karpenter ]       [ Envoy Gateway ]    [ Crossplane ]
+       │   (Compute Nodes)     (Gateway API Ingress) (OCI Infra)│
+       │                                                        │
+       │                              │                         │
+       │                              ▼                         │
+       │              [ External Secrets Operator (ESO) ]       │
+       │                    (Vault Secret Sync)                 │
+       └──────────────────────────────┬─────────────────────────┘
+                                      │
+                                      ▼
+                         ┌──────────────────────────┐
+                         │       OCI Cloud API      │
+                         │ ──► Autonomous Database  │
+                         │ ──► Object Storage Bucket│
+                         │ ──► Existing OCI Vault   │
+                         └──────────────────────────┘
+</pre>
+
+<pre style="font-family: 'Courier New', Courier, monospace;">
+
+       TODO APPLICATION RUNTIME
+
+       Browser
+         │
+         ▼
+       [ Envoy Gateway ]
+         ├── / ─────► [ Todo UI ]
+         └── /api ──► [ Todo API ] ───► [ Autonomous Database ]
+
+       [ External Secrets Operator ] ◄──► [ Existing OCI Vault ]
+                    │
+                    ▼
+          [ Scoped Kubernetes Secrets ] ───► Todo API / Crossplane
 </pre>
