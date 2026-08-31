@@ -14,5 +14,4 @@ spec:
     namespace: frsxwtjslf35
     versioning: Enabled
   providerConfigRef:
-    kind: ClusterProviderConfig
     name: default

@@ -16,7 +16,6 @@ spec:
     prohibitPublicIpOnVnic: true
     vcnId: ocid1.vcn.oc1.eu-frankfurt-1.amaaaaaauevftmqa4zv5adjboj5762tgmyvzwkdjqaimp6kmrdgz3lk2tz4a
   providerConfigRef:
-    kind: ClusterProviderConfig
     name: default
 ---
 apiVersion: networking.oci.upbound.io/v1alpha1
@@ -33,7 +32,6 @@ spec:
     displayName: oke-openspec-codex-adb
     vcnId: ocid1.vcn.oc1.eu-frankfurt-1.amaaaaaauevftmqa4zv5adjboj5762tgmyvzwkdjqaimp6kmrdgz3lk2tz4a
   providerConfigRef:
-    kind: ClusterProviderConfig
     name: default
 ---
 apiVersion: networking.oci.upbound.io/v1alpha1
@@ -57,5 +55,4 @@ spec:
           - min: 1522
             max: 1522
   providerConfigRef:
-    kind: ClusterProviderConfig
     name: default

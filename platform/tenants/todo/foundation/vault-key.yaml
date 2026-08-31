@@ -15,5 +15,4 @@ spec:
       - algorithm: AES
         length: 32
   providerConfigRef:
-    kind: ClusterProviderConfig
     name: default
