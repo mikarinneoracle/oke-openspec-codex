@@ -42,7 +42,10 @@ spec:
     settings:
       clusterCompartmentId: ocid1.compartment.oc1..aaaaaaaawccfklp2wj4c5ymigrkjfdhcbcm3u5ripl2whnznhmvgiqdatqgq
       vcnCompartmentId: ocid1.compartment.oc1..aaaaaaaawccfklp2wj4c5ymigrkjfdhcbcm3u5ripl2whnznhmvgiqdatqgq
-      apiserverEndpoint: 10.42.0.12:6443
+      # KPO passes this value straight to /etc/oke/oke-install.sh. The
+      # documented value is the private endpoint IP; the bootstrap script owns
+      # the Kubernetes API port.
+      apiserverEndpoint: 10.42.0.12
       ociVcnIpNative: true
       ipFamilies:
         - IPv4

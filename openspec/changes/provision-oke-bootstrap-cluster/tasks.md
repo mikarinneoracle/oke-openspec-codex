@@ -66,5 +66,8 @@
     Git-managed `karpenter-registration-probe` targeted to the application
     NodePool. Remove the probe and restore `logLevel: info` once the bootstrap
     cause is established.
+  - Set `settings.apiserverEndpoint` to the OKE private endpoint IP only (for
+    this cluster, `10.42.0.12`), without `:6443`. KPO passes the value to
+    `oke-install.sh`, which owns the API port selection during worker bootstrap.
 - [ ] Add an optional Git-managed static Karpenter NodePool only when a manual
   capacity floor is needed.
