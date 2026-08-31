@@ -68,8 +68,9 @@ spec:
   interval: 1m0s
   path: ./platform/tenants/todo/secrets
   prune: true
+  retryInterval: 1m0s
   sourceRef:
     kind: GitRepository
     name: flux-system
-  timeout: 10m0s
+  timeout: 2m0s
   wait: true
