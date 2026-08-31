@@ -150,8 +150,8 @@
 - [x] Publish Todo API images to the Crossplane-managed OCIR repository at
   `fra.ocir.io` through the protected `ocir-publish` GitHub Environment.
   - [x] Install the OCI Artifacts Crossplane provider through Flux and declare
-    the private `oke-openspec-codex/todo-api` repository in the `mika.rinne`
-    compartment. Releases use unique Git SHA tags and the workflow never
+    the private `oke-openspec-codex/todo-api` repository in the
+    developer-selected OCI compartment. Releases use unique Git SHA tags and the workflow never
     overwrites a tag; OCI Artifacts does not currently support enforcing
     `isImmutable` when creating this repository. Crossplane needs `manage repos
     in compartment` in addition to its existing least-privilege OCI policy.

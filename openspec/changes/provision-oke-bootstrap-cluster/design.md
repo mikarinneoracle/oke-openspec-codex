@@ -26,9 +26,13 @@ API origin and the API permits CORS only from that UI origin.
 
 ## Terraform source strategy
 
-Use the reviewed `oke-rm` source as a transparent reference, not as an opaque
-zip import. Preserve its separation between network and OKE control plane, then
-select only the capabilities required for this single-cluster Todo platform.
+Use the reviewed upstream [OKE Resource Manager reference
+implementation](https://github.com/oracle-devrel/technology-engineering/tree/main/oci-and-db/cloud-native/devops-and-containers/oke/oke-rm)
+as a transparent reference, not as an opaque zip import. Preserve its
+separation between network and OKE control plane, then select only the
+capabilities required for this single-cluster Todo platform. The upstream
+[OKE OCI Karpenter guide](https://github.com/oracle-devrel/technology-engineering/blob/main/oci-and-db/cloud-native/devops-and-containers/oke/oke-rm/oke-oci-karpenter-guide.md)
+is the corresponding implementation reference for Karpenter Provider for OCI.
 
 The initial node pool must be explicitly enabled. It hosts Flux, Envoy Gateway,
 Crossplane, the Todo API, and the UI workload before any later autoscaling work.
@@ -63,7 +67,7 @@ to Karpenter nodes when necessary.
 ## Confirmed baseline decisions
 
 - Region: `eu-frankfurt-1`.
-- Target compartment: `mika.rinne` (the OCID is supplied only in local
+- Target compartment: developer-selected (the OCID is supplied only in local
   `terraform.tfvars` or Resource Manager stack variables).
 - Terraform creates a new VCN.
 - The Kubernetes API endpoint is public, while workers and pods run in private
