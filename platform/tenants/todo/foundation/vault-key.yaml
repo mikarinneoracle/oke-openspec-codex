@@ -1,0 +1,19 @@
+apiVersion: kms.oci.upbound.io/v1alpha1
+kind: Key
+metadata:
+  name: todo-secrets
+  labels:
+    app.kubernetes.io/part-of: todo-db-app
+    app.kubernetes.io/component: secrets
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    compartmentId: ocid1.compartment.oc1..aaaaaaaawccfklp2wj4c5ymigrkjfdhcbcm3u5ripl2whnznhmvgiqdatqgq
+    displayName: oke-openspec-codex-todo-secrets
+    managementEndpoint: https://cbrcv4plaahh4-management.kms.eu-frankfurt-1.oraclecloud.com
+    keyShape:
+      - algorithm: AES
+        length: 32
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default

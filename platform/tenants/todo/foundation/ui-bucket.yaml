@@ -1,0 +1,18 @@
+apiVersion: objectstorage.oci.upbound.io/v1alpha1
+kind: Bucket
+metadata:
+  name: todo-ui-artifacts
+  labels:
+    app.kubernetes.io/part-of: todo-db-app
+    app.kubernetes.io/component: ui-artifacts
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    accessType: NoPublicAccess
+    compartmentId: ocid1.compartment.oc1..aaaaaaaawccfklp2wj4c5ymigrkjfdhcbcm3u5ripl2whnznhmvgiqdatqgq
+    name: oke-openspec-codex-todo-ui
+    namespace: frsxwtjslf35
+    versioning: Enabled
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default

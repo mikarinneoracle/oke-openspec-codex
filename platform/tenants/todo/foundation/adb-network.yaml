@@ -1,0 +1,61 @@
+apiVersion: networking.oci.upbound.io/v1alpha1
+kind: Subnet
+metadata:
+  name: todo-adb-private
+  labels:
+    app.kubernetes.io/part-of: todo-db-app
+    app.kubernetes.io/component: database-network
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    cidrBlock: 10.42.160.0/24
+    compartmentId: ocid1.compartment.oc1..aaaaaaaawccfklp2wj4c5ymigrkjfdhcbcm3u5ripl2whnznhmvgiqdatqgq
+    displayName: oke-openspec-codex-adb-private
+    dnsLabel: adb
+    prohibitInternetIngress: true
+    prohibitPublicIpOnVnic: true
+    vcnId: ocid1.vcn.oc1.eu-frankfurt-1.amaaaaaauevftmqa4zv5adjboj5762tgmyvzwkdjqaimp6kmrdgz3lk2tz4a
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default
+---
+apiVersion: networking.oci.upbound.io/v1alpha1
+kind: NetworkSecurityGroup
+metadata:
+  name: todo-adb
+  labels:
+    app.kubernetes.io/part-of: todo-db-app
+    app.kubernetes.io/component: database-network
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    compartmentId: ocid1.compartment.oc1..aaaaaaaawccfklp2wj4c5ymigrkjfdhcbcm3u5ripl2whnznhmvgiqdatqgq
+    displayName: oke-openspec-codex-adb
+    vcnId: ocid1.vcn.oc1.eu-frankfurt-1.amaaaaaauevftmqa4zv5adjboj5762tgmyvzwkdjqaimp6kmrdgz3lk2tz4a
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default
+---
+apiVersion: networking.oci.upbound.io/v1alpha1
+kind: NetworkSecurityGroupSecurityRule
+metadata:
+  name: todo-adb-from-pods
+  labels:
+    app.kubernetes.io/part-of: todo-db-app
+    app.kubernetes.io/component: database-network
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    direction: INGRESS
+    networkSecurityGroupIdRef:
+      name: todo-adb
+    protocol: "6"
+    source: 10.42.64.0/18
+    sourceType: CIDR_BLOCK
+    tcpOptions:
+      - destinationPortRange:
+          - min: 1522
+            max: 1522
+  providerConfigRef:
+    kind: ClusterProviderConfig
+    name: default

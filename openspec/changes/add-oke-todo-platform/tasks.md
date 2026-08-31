@@ -93,3 +93,16 @@
 - [ ] Add UI and API Kubernetes manifests, Gateway, and HTTPRoute.
 - [ ] Build, test, and publish a versioned UI artefact to Object Storage.
 - [ ] Verify Flux reconciliation and the browser request flow.
+
+## Decommissioning
+
+- [ ] Document and rehearse the complete teardown in dependency order:
+  - Remove Todo GitOps resources first, while Crossplane and ESO still have
+    permission to deprovision the database, bucket, key, network resources,
+    and secrets they manage.
+  - Remove ESO, Crossplane, Envoy Gateway, and Flux after application resource
+    cleanup has completed.
+  - Remove the dedicated Crossplane and ESO OCI IAM policies only after their
+    managed resources are gone.
+  - Run the bootstrap Terraform teardown last to remove the OKE cluster and
+    its VCN foundation.

@@ -37,3 +37,20 @@ and Oracle Autonomous Database persistence.
 
 Local `kubectl` access is discovery-only. Cluster changes are made only by the
 approved GitOps bootstrap and reconciliation workflow.
+
+## Decommissioning requirement
+
+The platform must support a documented, complete teardown that removes both
+the application resources and their dedicated OCI IAM policies. Teardown must
+preserve the permissions required for Crossplane and ESO to deprovision their
+managed OCI resources before those policies are removed.
+
+The required order is:
+
+1. Remove the Todo GitOps resources so Flux, Crossplane, and ESO can delete
+   the application database, bucket, key, network resources, and secrets.
+2. Remove post-bootstrap platform components, including ESO, Crossplane, Envoy
+   Gateway, and Flux.
+3. Remove the dedicated Crossplane and ESO OCI IAM policies.
+4. Run the bootstrap Terraform teardown to remove the OKE cluster and its
+   bootstrap VCN resources.
