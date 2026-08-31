@@ -1,8 +1,9 @@
 import { readFile } from 'node:fs/promises';
 import { closePool, withConnection } from './database.js';
+import { executableSql } from './migration-sql.js';
 
 async function migrate() {
-  const statement = (await readFile(new URL('../database/schema.sql', import.meta.url), 'utf8')).trim();
+  const statement = executableSql(await readFile(new URL('../database/schema.sql', import.meta.url), 'utf8'));
   await withConnection(async (connection) => {
     try {
       await connection.execute(statement);
