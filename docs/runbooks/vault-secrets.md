@@ -14,7 +14,7 @@ OCI Vault and Kubernetes.
 
 | OCI Vault secret name | Created by | OCI Vault purpose | Kubernetes consumer | Rotation |
 | --- | --- | --- | --- | --- |
-| `oke-openspec-codex-todo-adb-admin-eso` | ESO `PushSecret` from a generated password | Autonomous Database administrator password | `crossplane-system/todo-adb-admin`, consumed by Crossplane's `AutonomousDatabase` | ESO is the owner. Update the GitOps generator only when a deliberate database credential rotation is planned. |
+| `oke-openspec-codex-todo-adb-admin-eso` | ESO `PushSecret` from a generated password | Autonomous Database administrator password | `crossplane-system/todo-adb-admin`, consumed by Crossplane's `AutonomousDatabase`; ESO separately materializes `todo-app/todo-adb-runtime` for the Todo API | ESO is the owner. Update the GitOps generator only when a deliberate database credential rotation is planned. |
 | `oke-openspec-codex-todo-ocir-pull` | Local `scripts/configure-ocir-pull-secret.sh`, with interactive token input | Docker `config.json` for pulling the private Todo API OCIR image | A Flux-managed `kubernetes.io/dockerconfigjson` Secret in `todo-app`, referenced only through the API Deployment's `imagePullSecrets` | Create a replacement OCIR auth token, then re-run `scripts/configure-ocir-pull-secret.sh`. ESO refreshes the in-cluster Secret. |
 
 ## Access boundaries

@@ -1,0 +1,144 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: todo-api
+  namespace: todo-app
+  labels:
+    app.kubernetes.io/name: todo-api
+    app.kubernetes.io/part-of: todo-db-app
+automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: todo-api-runtime
+  namespace: todo-app
+  labels:
+    app.kubernetes.io/name: todo-api
+    app.kubernetes.io/part-of: todo-db-app
+data:
+  TODO_DB_USER: ADMIN
+  # ADB server-TLS endpoint: it needs no wallet and is reachable only through
+  # the private endpoint NSG on TCP 1521.
+  TODO_DB_CONNECT_STRING: >-
+    (description=(retry_count=20)(retry_delay=3)(address=(protocol=tcps)(port=1521)(host=todoadb.adb.eu-frankfurt-1.oraclecloud.com))(connect_data=(service_name=g9051959400a6d8_tododb_high.adb.oraclecloud.com))(security=(ssl_server_dn_match=yes)))
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: todo-adb-runtime
+  namespace: todo-app
+  labels:
+    app.kubernetes.io/name: todo-api
+    app.kubernetes.io/part-of: todo-db-app
+spec:
+  refreshInterval: 1h0m0s
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: todo-runtime-vault
+  target:
+    creationPolicy: Owner
+    deletionPolicy: Delete
+    name: todo-adb-runtime
+  data:
+    - secretKey: TODO_DB_PASSWORD
+      remoteRef:
+        key: oke-openspec-codex-todo-adb-admin-eso
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-api
+  namespace: todo-app
+  labels:
+    app.kubernetes.io/name: todo-api
+    app.kubernetes.io/part-of: todo-db-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: todo-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: todo-api
+        app.kubernetes.io/part-of: todo-db-app
+    spec:
+      serviceAccountName: todo-api
+      imagePullSecrets:
+        - name: todo-ocir-pull
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+      initContainers:
+        - name: schema-migration
+          image: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:8a6e8cc84ff821e2e6e4aae1b043ed2017135c8e
+          imagePullPolicy: IfNotPresent
+          command: [node, src/migrate.js]
+          envFrom:
+            - configMapRef:
+                name: todo-api-runtime
+            - secretRef:
+                name: todo-adb-runtime
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+      containers:
+        - name: api
+          image: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:8a6e8cc84ff821e2e6e4aae1b043ed2017135c8e
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+          envFrom:
+            - configMapRef:
+                name: todo-api-runtime
+            - secretRef:
+                name: todo-adb-runtime
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ALL]
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: todo-api
+  namespace: todo-app
+  labels:
+    app.kubernetes.io/name: todo-api
+    app.kubernetes.io/part-of: todo-db-app
+spec:
+  selector:
+    app.kubernetes.io/name: todo-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: http

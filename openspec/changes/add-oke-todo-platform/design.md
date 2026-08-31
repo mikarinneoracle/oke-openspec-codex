@@ -79,6 +79,11 @@ bootstrap procedure when its originating PAT expires.
   because OCI Artifacts does not currently support enforcing `isImmutable` when
   creating this repository. OKE image-pull secret automation and image signing
   are intentionally optional for the initial demo.
+- The Todo API runtime has no OCI Workload Identity. ESO materializes the
+  database password into `todo-app/todo-adb-runtime`; the non-sensitive `ADMIN`
+  username and private server-TLS connect string are held in a ConfigMap. The
+  Deployment references the immutable OCIR image by Git SHA and runs the
+  schema migration as an initContainer before serving requests.
 - The Todo database is a private Autonomous Database Serverless instance using
   the `ECPU` compute model with 2 ECPUs, 20 GB initial storage, and auto
   scaling disabled. Its private endpoint has a dedicated subnet and security
