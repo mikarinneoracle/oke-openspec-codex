@@ -149,9 +149,13 @@
     Kubernetes access.
   - [x] Document manual GitOps promotion: after a successful UI build, a
     developer updates only the Git-SHA-pinned `UI_RELEASE_BUNDLE_URL` in the
-    Nginx bridge manifest, commits it, and lets Flux perform the rolling
-    update. Document immutable-release rollback and direct Object Storage/CDN
-    delivery as the TLS-enabled future path.
+    Nginx bridge manifest with `scripts/promote-ui-release.sh`, commits it, and
+    lets Flux perform the rolling update. Document immutable-release rollback
+    and direct Object Storage/CDN delivery as the TLS-enabled future path.
+  - [x] Add a UI source pull-request validation workflow for `npm ci`, lint,
+    and production build. Add a PR template that records the change summary,
+    local preview browser test, successful immutable build SHA, promotion SHA,
+    and rollback SHA before a release-promotion PR is approved.
   - [ ] Optionally automate UI promotion by having GitHub Actions open a
     reviewable pull request that changes only the pinned release SHA. It must
     not write to Kubernetes or bypass the Git review and Flux reconciliation

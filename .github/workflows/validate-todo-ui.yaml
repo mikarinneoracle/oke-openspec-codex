@@ -1,0 +1,32 @@
+name: Validate Todo UI
+
+on:
+  pull_request:
+    paths:
+      - apps/todo-db-app/**
+      - .github/workflows/validate-todo-ui.yaml
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Lint and build Todo UI
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/todo-db-app/package-lock.json
+
+      - name: Lint and build UI
+        working-directory: apps/todo-db-app
+        run: |
+          npm ci
+          npm run lint
+          npm run build

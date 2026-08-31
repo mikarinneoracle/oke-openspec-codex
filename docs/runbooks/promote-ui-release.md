@@ -16,11 +16,54 @@ and Flux remains the only continuous Kubernetes writer.
   run summary and is used as the Object Storage release prefix.
 - The repository is on `main` with the desired review and approval process.
 
+## Review and test sequence
+
+Use two reviewed pull requests for a UI change:
+
+1. **UI source PR:** describe the visible change in the PR Summary. GitHub
+   Actions runs `npm ci`, lint, and the production build automatically. Before
+   approval, pull the PR branch locally and run:
+
+   ```sh
+   cd apps/todo-db-app
+   npm ci
+   npm run lint
+   npm run build
+   npm run preview
+   ```
+
+   Complete a browser smoke test against the preview and record its outcome in
+   the PR. Merging this PR to `main` publishes a new immutable UI artefact.
+
+2. **Promotion PR:** after that publishing workflow succeeds, run the
+   promotion script on a branch, review the single release-reference change,
+   and record both the promoted and rollback SHA in the PR template. Merging
+   this PR is the user-facing release decision; Flux then updates the bridge.
+
+The repository PR template contains the corresponding checklists. This keeps
+commit messages focused on the change itself while making validation and release
+evidence visible to reviewers.
+
 ## Promote the release
 
-1. In
-   `platform/tenants/todo/application/todo-ui-bridge.yaml`, change only the
-   Git SHA in `UI_RELEASE_BUNDLE_URL` so that it refers to:
+Run the interactive promotion script from the repository root:
+
+```sh
+sh scripts/promote-ui-release.sh
+```
+
+It queries GitHub for the latest successful `Publish Todo UI` workflow SHA,
+asks for confirmation, and changes only the Git-managed bridge release pin. To
+promote a specific already-successful build instead, supply its full SHA:
+
+```sh
+sh scripts/promote-ui-release.sh <git-sha>
+```
+
+The script does not commit, push, contact OCI Object Storage, or use Kubernetes
+credentials. Review its resulting diff before completing the promotion:
+
+1. Confirm that `UI_RELEASE_BUNDLE_URL` refers to:
 
    ```text
    .../releases/<git-sha>/bundle.tar.gz
