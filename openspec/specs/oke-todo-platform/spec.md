@@ -26,6 +26,10 @@ and Oracle Autonomous Database persistence.
   CPU utilization target. Karpenter provisions workload nodes only for
   HPA-created pods that cannot be scheduled; the current NodePool ceiling is
   four 1-OCPU/8-GB nodes.
+- A documented capacity experiment may temporarily raise the HPA floor to ten
+  replicas through Flux. This verifies pod scheduling and Karpenter capacity;
+  it is distinct from CPU-driven HPA scale-up and must restore the normal
+  one-replica floor through Git after observations are recorded.
 - The demo UI and API share the Envoy Gateway HTTP origin, so browser CORS is
   not required. This is not a production transport: direct bucket/CDN delivery
   requires an HTTPS API origin and scoped CORS before the demo bridge is removed.

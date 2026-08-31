@@ -38,6 +38,12 @@
   Todo API HPA for the Loader.io experiment: 1–20 replicas, 60% CPU target,
   rapid scale-up, and five-minute scale-down stabilization. Validate Metrics
   API availability and HPA status before starting the external load test.
+  - [ ] Run the GitOps-controlled Karpenter capacity experiment: temporarily
+    raise the Todo API HPA floor to 10 replicas, verify the resulting pod
+    placement and any NodeClaims/nodes, then run Loader.io `GET /api/tasks`.
+    Record the HPA, pod, node, and request-result observations before restoring
+    `minReplicas: 1` through Git. This validates scheduling-driven Karpenter
+    capacity; it does not by itself validate CPU-driven HPA scale-up.
   - [ ] Remove the temporary public Loader.io HTTP verification route from the
     Nginx demo bridge after the experiment is complete.
 

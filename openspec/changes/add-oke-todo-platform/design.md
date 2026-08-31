@@ -32,11 +32,21 @@ uses `docker.io/nginxinc/nginx-unprivileged`, not an ambiguous short image name.
 
 Flux installs the Kubernetes Metrics Server on the fixed, tainted system node.
 It provides the aggregated Metrics API used by `kubectl top` and the Todo API
-HorizontalPodAutoscaler (HPA). The HPA starts at one replica, targets 60% of
-the API container's requested CPU, and is bounded at 20 replicas. It may grow
-by up to 100% or four pods per minute, then waits five minutes before gradually
-scaling down. The 20-replica limit also caps the initial worst-case database
-concurrency at 20 lazy `node-oracledb` connections.
+HorizontalPodAutoscaler (HPA). Its normal floor is one replica, it targets 60%
+of the API container's requested CPU, and is bounded at 20 replicas. It may
+grow by up to 100% or four pods per minute, then waits five minutes before
+gradually scaling down. The 20-replica limit also caps the initial worst-case
+database concurrency at 20 lazy `node-oracledb` connections.
+
+For the documented Loader.io/Karpenter capacity experiment, Git temporarily
+raises the HPA floor to ten replicas. This is a deliberate scheduling test, not
+evidence of CPU-driven HPA scale-up: Flux creates ten API pods, and Karpenter
+adds workload capacity only if the scheduler cannot place them on existing
+nodes. Each replica can create at most one lazy ADB connection when it receives
+traffic. During the test, record the HPA, pod placement, NodeClaims/nodes, and
+Loader.io result. Afterwards, restore `minReplicas: 1` through Git; the HPA's
+five-minute scale-down stabilization and Karpenter's empty-node consolidation
+then return capacity gradually.
 
 Karpenter does not react to HTTP traffic directly. It provisions an additional
 workload node only when the HPA-created API pods cannot be scheduled from their
