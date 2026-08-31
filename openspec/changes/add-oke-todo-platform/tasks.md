@@ -127,7 +127,7 @@
     Terraform.
   - [x] Store `OCI_REGISTRY_USERNAME` and `OCI_REGISTRY_AUTH_TOKEN` using the
     manual CLI procedure in `docs/runbooks/configure-ocir-actions-secrets.md`.
-  - [ ] Deliver the private OCIR image-pull secret through the existing Vault
+  - [x] Deliver the private OCIR image-pull secret through the existing Vault
     and ESO before deploying the API to OKE. The user enters the token only in
     `scripts/configure-ocir-pull-secret.sh`; the script never reads GitHub
     secrets. Flux then creates the `todo-app/todo-ocir-pull`
