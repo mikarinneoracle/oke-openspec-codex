@@ -100,6 +100,11 @@
   - [ ] Expose the API through an HTTPS Envoy Gateway listener and permit CORS
     only from the configured public Object Storage UI origin.
 - [ ] Build, test, and publish a versioned UI artefact to Object Storage.
+  - [x] Add the `Publish Todo UI` GitHub Actions workflow. It has only GitHub
+    read access, uses the `ui-publish` environment, and uploads immutable
+    `releases/<git-sha>/` files through the write-only PAR.
+  - [ ] Set the non-secret `TODO_API_BASE_URL` environment variable to the
+    final HTTPS Envoy Gateway API origin before enabling a release upload.
   - [ ] Create a time-bound `AnyObjectWrite` PAR restricted to the UI bucket's
     `releases/` prefix and store its complete URL only as the protected GitHub
     Environment secret `OCI_TODO_UI_WRITE_PAR_URL`, following the OCI CLI

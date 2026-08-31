@@ -1,0 +1,82 @@
+name: Publish Todo UI
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - apps/todo-db-app/**
+      - .github/workflows/publish-todo-ui.yaml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    name: Build and publish immutable UI release
+    runs-on: ubuntu-latest
+    environment: ui-publish
+    env:
+      # A non-secret GitHub Environment variable. It must be an HTTPS URL for
+      # the Envoy Gateway API endpoint; the browser cannot call an HTTP API
+      # from the HTTPS Object Storage UI.
+      TODO_API_BASE_URL: ${{ vars.TODO_API_BASE_URL }}
+      OCI_TODO_UI_WRITE_PAR_URL: ${{ secrets.OCI_TODO_UI_WRITE_PAR_URL }}
+      RELEASE_PREFIX: releases/${{ github.sha }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: apps/todo-db-app/package-lock.json
+
+      - name: Validate release configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$TODO_API_BASE_URL"
+          test -n "$OCI_TODO_UI_WRITE_PAR_URL"
+          case "$TODO_API_BASE_URL" in https://*) ;; *) exit 1 ;; esac
+
+      - name: Build and lint UI
+        working-directory: apps/todo-db-app
+        env:
+          VITE_TODO_API_BASE_URL: ${{ env.TODO_API_BASE_URL }}
+        run: |
+          npm ci
+          npm run lint
+          npm run build
+
+      - name: Upload release through write-only PAR
+        shell: bash
+        working-directory: apps/todo-db-app
+        run: |
+          set -euo pipefail
+          find dist -type f -print0 | while IFS= read -r -d '' artifact; do
+            relative_path="${artifact#dist/}"
+            content_type="$(file --brief --mime-type "$artifact")"
+            cache_control='public, max-age=31536000, immutable'
+            if [ "$relative_path" = 'index.html' ]; then
+              cache_control='no-cache'
+            fi
+            curl --fail --silent --show-error --retry 3 \
+              --upload-file "$artifact" \
+              --header "Content-Type: $content_type" \
+              --header "Cache-Control: $cache_control" \
+              "${OCI_TODO_UI_WRITE_PAR_URL}${RELEASE_PREFIX}/${relative_path}"
+          done
+
+      - name: Publish release summary
+        shell: bash
+        run: |
+          {
+            echo '## Todo UI release published'
+            echo
+            echo "- Release prefix: \`$RELEASE_PREFIX/\`"
+            echo "- API origin: \`$TODO_API_BASE_URL\`"
+          } >> "$GITHUB_STEP_SUMMARY"
