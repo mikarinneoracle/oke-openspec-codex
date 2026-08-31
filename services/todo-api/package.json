@@ -1,0 +1,16 @@
+{
+  "name": "todo-api",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": { "node": ">=20.19.0" },
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test",
+    "lint": "node --check src/*.js test/*.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "oracledb": "^7.0.1"
+  }
+}
