@@ -25,3 +25,4 @@ system_node_memory_gb = 8
 # Karpenter capacity is configured later in GitOps manifests. Keep manual
 # static capacity and automatic dynamic capacity as separate NodePools. Its
 # OCI workload-identity policies are added with the Flux/Karpenter change.
+todo_vault_id = "REPLACE_WITH_EXISTING_VAULT_OCID"

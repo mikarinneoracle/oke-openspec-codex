@@ -55,9 +55,10 @@ bootstrap procedure when its originating PAT expires.
   the `ECPU` compute model with 2 ECPUs, 20 GB initial storage, and auto
   scaling disabled. Its private endpoint has a dedicated subnet and security
   rules rather than a public database endpoint.
-- Terraform creates the OCI Vault, its encryption key, and the generated
-  database-admin password. The password is stored in OCI Vault and in local
-  Terraform state as a sensitive value; it is never committed. External
+- Terraform uses an existing OCI Vault because the tenancy cannot create an
+  additional Vault. It creates a dedicated encryption key and generated
+  database-admin password there. The password is stored in OCI Vault and in
+  local Terraform state as a sensitive value; it is never committed. External
   Secrets Operator, installed by Flux, uses a dedicated OKE Workload Identity
   to synchronize the password only to the namespace Crossplane needs while
   provisioning the database.

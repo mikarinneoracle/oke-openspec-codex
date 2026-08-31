@@ -37,9 +37,10 @@
 - [ ] Declare Object Storage, workload identity, and required database resources
   through Crossplane.
   - [x] Install the OCI Database Crossplane provider through Flux.
-  - [ ] Create a dedicated private subnet and network security rules for the
+  - [x] Create a dedicated private subnet and network security rules for the
     Autonomous Database private endpoint.
-  - [ ] Create an OCI Vault, encryption key, and a generated database-admin
+  - [x] Use the existing OCI Vault (the tenancy Vault limit prevents creating a
+    new one), create a dedicated encryption key, and generate the database-admin
     password with Terraform. Keep the password out of Git; Terraform state is
     local and contains it as a sensitive value.
   - [ ] Grant the Crossplane OCI workload only Object Storage and Autonomous
