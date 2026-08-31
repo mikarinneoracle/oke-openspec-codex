@@ -17,6 +17,9 @@ spec:
   install:
     createNamespace: true
   values:
+    # Temporarily raise KPO controller detail while diagnosing worker-node
+    # registration. Revert to `info` once the probe node has joined.
+    logLevel: debug
     replicaCount: 1
     serviceAccount:
       name: karpenter

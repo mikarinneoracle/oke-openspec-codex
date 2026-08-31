@@ -61,5 +61,10 @@
     does not create an artificial Karpenter scale-out demand. Manage this as a
     narrow, non-pruning Flux server-side-apply overlay; do not replace the OKE
     add-on Deployment or patch it manually.
+  - During a failed KPO node-registration investigation, enable KPO's
+    `logLevel: debug` through its Flux HelmRelease and use a temporary
+    Git-managed `karpenter-registration-probe` targeted to the application
+    NodePool. Remove the probe and restore `logLevel: info` once the bootstrap
+    cause is established.
 - [ ] Add an optional Git-managed static Karpenter NodePool only when a manual
   capacity floor is needed.
