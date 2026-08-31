@@ -114,6 +114,12 @@
   - [ ] Upload the immutable UI release through that write-only PAR without
     logging its URL. Do not grant GitHub Actions an OCI user/API key or
     Kubernetes access.
+- [ ] Publish Todo API images to the Crossplane-managed OCIR repository at
+  `fra.ocir.io` through the protected `ocir-publish` GitHub Environment.
+  - [ ] Store `OCI_REGISTRY_USERNAME` and `OCI_REGISTRY_AUTH_TOKEN` using the
+    manual CLI procedure in `docs/runbooks/configure-ocir-actions-secrets.md`.
+  - [ ] Keep OKE OCIR image-pull secret automation and image signing optional;
+    they are not prerequisites for the initial demo image publication.
 - [ ] Verify Flux reconciliation and the browser request flow.
 
 ## Decommissioning

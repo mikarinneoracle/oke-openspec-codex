@@ -59,6 +59,8 @@ Object Storage -bucketista, jossa object-read on julkinen mutta listaus estetty.
 Write-PARin manuaalinen OCI CLI -luonti, GitHub Environment -tallennus ja
 rotaatio on kuvattu tiedostossa
 [`docs/runbooks/create-ui-write-par.md`](docs/runbooks/create-ui-write-par.md).
+OCIR Actions -kirjautumisen vastaava CLI-ohje on
+[`docs/runbooks/configure-ocir-actions-secrets.md`](docs/runbooks/configure-ocir-actions-secrets.md).
 
 <pre style="font-family: 'Courier New', Courier, monospace;">
 
