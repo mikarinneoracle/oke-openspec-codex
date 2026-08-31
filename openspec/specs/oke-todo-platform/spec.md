@@ -24,6 +24,10 @@ and Oracle Autonomous Database persistence.
 - The demo UI and API share the Envoy Gateway HTTP origin, so browser CORS is
   not required. This is not a production transport: direct bucket/CDN delivery
   requires an HTTPS API origin and scoped CORS before the demo bridge is removed.
+- The demo Nginx bridge downloads a Git-SHA-pinned public
+  `releases/<sha>/bundle.tar.gz` Object Storage object into an ephemeral volume.
+  It has no OCI identity, PAR URL, or object-listing capability. Envoy Gateway
+  sends `/api` to the Todo API Service and all other paths to that Nginx Service.
 - Crossplane declares OCI infrastructure required by the application.
 - Flux reconciles reviewed Git manifests to the cluster.
 - External Secrets Operator (ESO), reconciled by Flux, is the approved bridge

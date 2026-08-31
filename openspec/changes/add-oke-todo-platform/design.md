@@ -18,6 +18,13 @@ single `bundle.tar.gz` for the no-list demo bridge; Crossplane owns the bucket a
 GitHub Actions can write only through its scoped write-PAR. It is not a
 developer working directory.
 
+The temporary Nginx bridge downloads only the public, immutable
+`releases/<git-sha>/bundle.tar.gz` object through the Object Storage object URL
+and extracts it to an `emptyDir`. It does not use the write-only CI PAR, OCI
+credentials, an OCI Workload Identity, or a listing operation. Gateway API
+routes `/api` to the Todo API Service and `/` to the Nginx Service, giving the
+browser one HTTP demo origin.
+
 ## Reconciliation and ownership
 
 ```text
@@ -74,8 +81,10 @@ bootstrap procedure when its originating PAT expires.
   artefact `releases/` prefix; it must not be used by browser or UI runtime.
 - The Todo API image is published from the protected `ocir-publish` GitHub
   Environment to the private Crossplane-managed OCIR repository at
-  `fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api`. The workflow uses an
-  OCI auth token limited to that repository and has no Kubernetes credentials.
+  the environment-configured registry and tenancy namespace. The registry is a
+  public Environment Variable; the tenancy namespace, OCI username, and auth
+  token are Environment Secrets. The workflow uses an OCI auth token limited to
+  that repository and has no Kubernetes credentials.
   Releases use unique Git SHA tags and the workflow never overwrites a tag,
   because OCI Artifacts does not currently support enforcing `isImmutable` when
   creating this repository. OKE image-pull secret automation and image signing

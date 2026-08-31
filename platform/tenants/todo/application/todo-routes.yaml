@@ -1,0 +1,27 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: todo-public-routes
+  namespace: todo-app
+  labels:
+    app.kubernetes.io/part-of: todo-db-app
+spec:
+  parentRefs:
+    - name: public-gateway
+      namespace: envoy-gateway-system
+      sectionName: http
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+      backendRefs:
+        - name: todo-api
+          port: 80
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: todo-ui-bridge
+          port: 80

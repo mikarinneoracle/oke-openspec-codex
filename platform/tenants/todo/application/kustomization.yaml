@@ -4,3 +4,5 @@ resources:
   - namespace.yaml
   - ocir-pull-secret.yaml
   - todo-api.yaml
+  - todo-ui-bridge.yaml
+  - todo-routes.yaml
