@@ -12,6 +12,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     environment: ocir-publish
+    env:
+      OCI_REGISTRY: ${{ vars.OCI_REGISTRY }}
+      OCI_TENANCY_NAMESPACE: ${{ secrets.OCI_TENANCY_NAMESPACE }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -24,13 +27,19 @@ jobs:
           npm ci
           npm test
           npm run lint
+      - name: Validate registry configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -n "$OCI_REGISTRY"
+          test -n "$OCI_TENANCY_NAMESPACE"
       - uses: docker/login-action@v3
         with:
-          registry: fra.ocir.io
+          registry: ${{ env.OCI_REGISTRY }}
           username: ${{ secrets.OCI_REGISTRY_USERNAME }}
           password: ${{ secrets.OCI_REGISTRY_AUTH_TOKEN }}
       - uses: docker/build-push-action@v6
         with:
           context: services/todo-api
           push: true
-          tags: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:${{ github.sha }}
+          tags: ${{ env.OCI_REGISTRY }}/${{ env.OCI_TENANCY_NAMESPACE }}/oke-openspec-codex/todo-api:${{ github.sha }}

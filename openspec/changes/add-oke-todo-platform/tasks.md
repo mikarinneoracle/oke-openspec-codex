@@ -139,7 +139,7 @@
     Terraform.
   - [x] Store `OCI_REGISTRY_USERNAME` and `OCI_REGISTRY_AUTH_TOKEN` using the
     manual CLI procedure in `docs/runbooks/configure-ocir-actions-secrets.md`.
-  - [ ] Consolidate OCIR Actions setup through
+  - [x] Consolidate OCIR Actions setup through
     `scripts/configure-ocir-actions-secrets.sh`: retain the public registry as
     an Environment Variable and store the tenancy namespace, username, and
     token as protected Environment Secrets before changing the workflow to
