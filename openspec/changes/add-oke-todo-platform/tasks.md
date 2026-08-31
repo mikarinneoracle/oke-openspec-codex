@@ -4,6 +4,8 @@
 
 - [x] Create application, platform, agent-skill, and OpenSpec directories.
 - [x] Define read-only local `kubectl` guardrails and primitive.
+- [x] Define read-only local `flux` guardrails and primitive for GitOps status
+  inspection; local Flux commands must not trigger reconciliation.
 - [x] Describe the intended OKE Todo platform.
 
 ## Prerequisites supplied by the user

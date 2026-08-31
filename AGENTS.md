@@ -37,3 +37,11 @@
   primitive for Vault-backed secret delivery.
 - Flux installs and configures External Secrets Operator (ESO); Crossplane
   consumes only scoped Kubernetes Secret references, never literal values.
+
+## Flux CLI access
+
+- Use the local `flux` CLI only through the `flux-read-only` skill and its
+  primitive.
+- Flux CLI inspection is limited to its read-only status, event, log, tree,
+  trace, export, and build commands. Never trigger a local reconcile or change
+  Flux state; reconciliation follows reviewed commits on `main`.
