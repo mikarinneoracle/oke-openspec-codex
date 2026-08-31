@@ -20,11 +20,14 @@ import TodoList from './components/TodoList';
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
-    primary: { main: '#171717', dark: '#000000', light: '#3c3c3c', contrastText: '#fff' },
-    background: { default: '#F5F5F5', paper: '#ffffff' },
-    text: { primary: '#171717', secondary: '#5c5c5c' },
-    divider: '#E0E0E0',
+    mode: 'dark',
+    primary: { main: '#38bdf8', dark: '#0284c7', light: '#7dd3fc', contrastText: '#002b36' },
+    secondary: { main: '#14b8a6', dark: '#0f766e', light: '#5eead4', contrastText: '#002b36' },
+    info: { main: '#22d3ee', dark: '#0891b2', light: '#67e8f9', contrastText: '#002b36' },
+    success: { main: '#2dd4bf', dark: '#0f766e', light: '#5eead4', contrastText: '#002b36' },
+    background: { default: '#002b36', paper: '#073642' },
+    text: { primary: '#e2e8f0', secondary: '#9fb5bd', disabled: '#66838d' },
+    divider: '#1d5663',
   },
   shape: { borderRadius: 16 },
   typography: { fontFamily: 'Roboto, sans-serif' },
@@ -33,7 +36,7 @@ const theme = createTheme({
       styleOverrides: { root: { textTransform: 'none' } },
       defaultProps: { disableRipple: true, disableElevation: true, variant: 'outlined' },
     },
-    MuiPaper: { styleOverrides: { root: { borderRadius: 24 }, elevation1: { boxShadow: '0px 6px 12px rgba(0, 0, 0, 0.05)' } } },
+    MuiPaper: { styleOverrides: { root: { borderRadius: 24 }, elevation1: { boxShadow: '0px 12px 28px rgba(0, 18, 24, 0.36)' } } },
     MuiChip: { styleOverrides: { root: { fontWeight: 500 } } },
   },
 });
