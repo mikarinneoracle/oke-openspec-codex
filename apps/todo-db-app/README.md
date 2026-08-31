@@ -1,11 +1,11 @@
 # Todo DB App UI
 
-React/Vite-käyttöliittymä OKE OpenSpec -esimerkkiprojektille.
+React/Vite user interface for the OKE OpenSpec reference project.
 
-Käyttöliittymä hakee ja muuttaa tehtäviä saman originin REST API -kutsuilla
-(`GET`, `POST`, `PATCH` ja `DELETE /api/tasks`). Envoy Gateway reitittää
-`/`-pyynnöt UI:lle ja `/api`-pyynnöt Node.js-palvelulle, joka käyttää Oracle
-Autonomous Databasea. Selain ei koskaan saa tietokantayhteystietoja.
+The UI reads and updates tasks through same-origin REST API calls (`GET`,
+`POST`, `PATCH`, and `DELETE /api/tasks`). Envoy Gateway routes `/` requests
+to the UI and `/api` requests to the Node.js service, which uses Oracle
+Autonomous Database. The browser never receives database credentials.
 
 ## Local development
 
@@ -21,11 +21,11 @@ npm run build
 npm run lint
 ```
 
-`dist/` on rakennusartefakti. GitHub Actions julkaisee sen versionoituna OCI
-Object Storageen write-only PAR-URL:lla, joka on ainoastaan suojattuna GitHub
-Environment Secretinä (`OCI_TODO_UI_WRITE_PAR_URL`). URL on bearer-salaisuus,
-eikä sitä commitata tai tulosteta lokiin. Nykyisessä no-DNS/no-certificate
-demossa Nginx UI -podi hakee versionoidun releasen public-read/no-list Object
-Storage -bucketista, ja Envoy Gateway tarjoaa UI:n sekä `/api`-reitin samasta
-HTTP-originista. Tämä bridge korvataan suoralla HTTPS Object Storage/CDN
--toimituksella, kun DNS ja TLS ovat käytettävissä.
+`dist/` is a build artifact. GitHub Actions publishes versioned releases to
+OCI Object Storage through a write-only PAR URL held only as the protected
+GitHub Environment Secret (`OCI_TODO_UI_WRITE_PAR_URL`). The URL is a bearer
+secret: it is never committed or printed in logs. In the current no-DNS,
+no-certificate demo, the Nginx UI pod retrieves the versioned release from a
+public-read/no-list Object Storage bucket, while Envoy Gateway serves the UI
+and `/api` route from the same HTTP origin. Replace this bridge with direct
+HTTPS Object Storage/CDN delivery once DNS and TLS are available.
