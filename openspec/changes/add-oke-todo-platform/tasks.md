@@ -27,7 +27,8 @@
 - [x] Verify Envoy Gateway's GatewayClass and the LoadBalancer created by the
   shared Gateway resource.
 - [x] Install Crossplane through Flux.
-- [ ] Install Crossplane's OCI provider configuration through Flux.
+- [x] Install Crossplane's OCI provider configuration through Flux using OKE
+  Workload Identity and the Object Storage provider.
 
 ## Application delivery
 
