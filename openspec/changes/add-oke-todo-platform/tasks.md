@@ -49,6 +49,9 @@
     credential in Git.
   - [x] Remove the static API Deployment replica count so HPA is the sole
     replica-count owner and Flux cannot reset an HPA scale-up.
+  - [x] Align the Karpenter NodePool CPU limit with OCI OCPU accounting: four
+    1-OCPU E5 nodes expose eight Kubernetes vCPUs, so retain `memory: 32Gi`
+    and set `cpu: "8"`.
   - [ ] Remove the temporary public Loader.io HTTP verification route from the
     Nginx demo bridge after the experiment is complete.
 

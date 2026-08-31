@@ -29,5 +29,7 @@ spec:
     consolidateAfter: 10m
     consolidationPolicy: WhenEmpty
   limits:
-    cpu: "4"
+    # OCI reports a 1-OCPU E5 node as two Kubernetes vCPUs. Keep the CPU
+    # ceiling aligned with four 1-OCPU nodes and the 32-Gi memory ceiling.
+    cpu: "8"
     memory: 32Gi

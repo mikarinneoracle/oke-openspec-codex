@@ -25,7 +25,9 @@ and Oracle Autonomous Database persistence.
   manages Todo API replicas. The initial HPA range is 1–20 replicas with a 60%
   CPU utilization target. Karpenter provisions workload nodes only for
   HPA-created pods that cannot be scheduled; the current NodePool ceiling is
-  four 1-OCPU/8-GB nodes.
+  four 1-OCPU/8-GB nodes. Because OCI exposes each 1-OCPU E5 node as two
+  Kubernetes vCPUs, that ceiling is represented by `limits.cpu: "8"` and
+  `limits.memory: 32Gi`.
 - The Todo API Deployment does not declare `spec.replicas`; HPA is the sole
   replica-count owner, while Flux manages all other Deployment fields. This
   preserves HPA scale-up and its five-minute scale-down stabilization.

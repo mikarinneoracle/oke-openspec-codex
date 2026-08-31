@@ -64,8 +64,10 @@ not database I/O or response size.
 Karpenter does not react to HTTP traffic directly. It provisions an additional
 workload node only when the HPA-created API pods cannot be scheduled from their
 CPU or memory requests. The current `todo-workload` NodePool permits at most
-four 1-OCPU/8-GB nodes; any higher load-test target requires an explicit review
-of both that capacity limit and the ADB session limit.
+four 1-OCPU/8-GB nodes. OCI exposes each 1-OCPU E5 node to Kubernetes as two
+vCPUs, so the NodePool uses an `8`-CPU Kubernetes limit alongside its `32Gi`
+memory limit. Any higher load-test target requires an explicit review of both
+that capacity limit and the ADB session limit.
 
 
 ## Reconciliation and ownership
