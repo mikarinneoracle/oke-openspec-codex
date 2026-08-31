@@ -1,0 +1,38 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: metrics-server
+  namespace: kube-system
+spec:
+  interval: 1m0s
+  chart:
+    spec:
+      chart: metrics-server
+      version: 3.13.0
+      sourceRef:
+        kind: HelmRepository
+        name: metrics-server
+  install:
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  values:
+    # Keep the aggregated Metrics API TLS-verified without adding cert-manager.
+    apiService:
+      insecureSkipTLSVerify: false
+    tls:
+      type: helm
+    args:
+      - --kubelet-preferred-address-types=InternalIP,Hostname,ExternalIP
+    nodeSelector:
+      node-role/system: "true"
+    tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+        effect: NoSchedule
+    resources:
+      requests:
+        cpu: 100m
+        memory: 200Mi

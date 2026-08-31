@@ -28,6 +28,22 @@ browser one HTTP demo origin.
 OKE's CRI-O enforces fully-qualified public image names. The bridge therefore
 uses `docker.io/nginxinc/nginx-unprivileged`, not an ambiguous short image name.
 
+## Load-driven autoscaling
+
+Flux installs the Kubernetes Metrics Server on the fixed, tainted system node.
+It provides the aggregated Metrics API used by `kubectl top` and the Todo API
+HorizontalPodAutoscaler (HPA). The HPA starts at one replica, targets 60% of
+the API container's requested CPU, and is bounded at 20 replicas. It may grow
+by up to 100% or four pods per minute, then waits five minutes before gradually
+scaling down. The 20-replica limit also caps the initial worst-case database
+concurrency at 20 lazy `node-oracledb` connections.
+
+Karpenter does not react to HTTP traffic directly. It provisions an additional
+workload node only when the HPA-created API pods cannot be scheduled from their
+CPU or memory requests. The current `todo-workload` NodePool permits at most
+four 1-OCPU/8-GB nodes; any higher load-test target requires an explicit review
+of both that capacity limit and the ADB session limit.
+
 ## Reconciliation and ownership
 
 ```text

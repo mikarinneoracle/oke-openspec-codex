@@ -21,6 +21,11 @@ and Oracle Autonomous Database persistence.
 - Each Todo API pod uses a lazy `node-oracledb` pool with `poolMin: 0` and
   `poolMax: 1`. Horizontal scaling therefore increases database concurrency in
   one-connection increments rather than multiplying a large per-pod pool.
+- Flux installs Metrics Server on the fixed system node and a CPU-based HPA
+  manages Todo API replicas. The initial HPA range is 1–20 replicas with a 60%
+  CPU utilization target. Karpenter provisions workload nodes only for
+  HPA-created pods that cannot be scheduled; the current NodePool ceiling is
+  four 1-OCPU/8-GB nodes.
 - The demo UI and API share the Envoy Gateway HTTP origin, so browser CORS is
   not required. This is not a production transport: direct bucket/CDN delivery
   requires an HTTPS API origin and scoped CORS before the demo bridge is removed.
