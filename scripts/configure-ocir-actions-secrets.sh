@@ -36,7 +36,7 @@ test -n "$ocir_namespace" || {
 printf '%s' "$ocir_namespace" | gh secret set OCI_TENANCY_NAMESPACE --env "$environment"
 unset ocir_namespace
 
-printf 'OCIR Docker username (input hidden): '
+printf 'Full OCIR Docker username including tenancy namespace (input hidden): '
 stty -echo
 IFS= read -r ocir_username
 stty echo

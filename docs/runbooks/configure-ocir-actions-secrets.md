@@ -21,9 +21,9 @@ sh scripts/configure-ocir-actions-secrets.sh
 ```
 
 The script prompts for the public OCIR registry endpoint (default:
-`fra.ocir.io`) and for three hidden values: tenancy namespace, username, and
-auth token. Do not paste a multi-line command block into the interactive
-prompts.
+`fra.ocir.io`) and for three hidden values: tenancy namespace, the **full
+OCIR Docker username including that namespace**, and auth token. Do not paste a
+multi-line command block into the interactive prompts.
 
 For a federated OCI identity-domain user, the username is normally
 `<tenancy-namespace>/<identity-domain>/<username>`. For a non-federated user
