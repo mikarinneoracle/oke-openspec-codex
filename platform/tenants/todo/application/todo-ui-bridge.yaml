@@ -19,6 +19,13 @@ data:
         return 200;
       }
 
+      # Temporary Loader.io target-host verification. This exact response must
+      # not be handled by the SPA fallback; remove it after load testing.
+      location = /loaderio-38fbc25a47ee54b9a37fbe3365b71030.txt {
+        default_type text/plain;
+        return 200 "loaderio-38fbc25a47ee54b9a37fbe3365b71030";
+      }
+
       location / {
         try_files $uri $uri/ /index.html;
       }
@@ -42,6 +49,10 @@ spec:
       labels:
         app.kubernetes.io/name: todo-ui-bridge
         app.kubernetes.io/part-of: todo-db-app
+      # ConfigMap volumes mounted with subPath do not update in place. Change
+      # this checksum whenever the Nginx configuration changes to roll pods.
+      annotations:
+        checksum/todo-ui-bridge-nginx: "3c65b3b45d27545c4255d1f8e5771798a78af5024f2aadd1f6db48661351f807"
     spec:
       automountServiceAccountToken: false
       securityContext:

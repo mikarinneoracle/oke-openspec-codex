@@ -34,10 +34,12 @@
 
 ## Application delivery
 
-- [ ] Install Metrics Server through Flux on the tainted system node and add a
+- [x] Install Metrics Server through Flux on the tainted system node and add a
   Todo API HPA for the Loader.io experiment: 1–20 replicas, 60% CPU target,
   rapid scale-up, and five-minute scale-down stabilization. Validate Metrics
   API availability and HPA status before starting the external load test.
+  - [ ] Remove the temporary public Loader.io HTTP verification route from the
+    Nginx demo bridge after the experiment is complete.
 
 - [x] Import the Todo UI source under `apps/todo-db-app/`.
 - [x] Implement the Node.js REST API and its `node-oracledb` persistence.
