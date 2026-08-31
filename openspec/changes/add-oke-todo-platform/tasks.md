@@ -102,7 +102,7 @@
     the scoped database runtime secret.
   - [x] Allow only server-TLS ADB traffic on TCP `1521` from the OKE pod CIDR;
     the demo does not use the mTLS/wallet port `1522`.
-  - [ ] Deliver the ADB password independently to `todo-app/todo-adb-runtime`
+  - [x] Deliver the ADB password independently to `todo-app/todo-adb-runtime`
     through ESO, then deploy the single-replica Todo API from its immutable
     OCIR Git SHA image. The workload has no OCI identity, uses a
     non-sensitive ConfigMap for the server-TLS connect string, and runs the
