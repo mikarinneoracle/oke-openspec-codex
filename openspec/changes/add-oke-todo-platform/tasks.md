@@ -96,7 +96,7 @@
   - [x] Remove the Terraform-created ADB subnet, NSG, Vault key, Vault secret,
     and local generated password after explicit approval. The shared existing
     OCI Vault remains an external platform prerequisite.
-- [ ] Add UI and API Kubernetes manifests, Gateway, and HTTPRoute.
+- [x] Add UI and API Kubernetes manifests, Gateway, and HTTPRoute.
   - [x] Add an idempotent API schema-migration command for the initial
     `todo_items` table. The Deployment will run it as an initContainer using
     the scoped database runtime secret.
@@ -107,12 +107,12 @@
     OCIR Git SHA image. The workload has no OCI identity, uses a
     non-sensitive ConfigMap for the server-TLS connect string, and runs the
     idempotent schema migration as an initContainer.
-  - [ ] Add the documented demo Nginx UI bridge: its initContainer retrieves a
+  - [x] Add the documented demo Nginx UI bridge: its initContainer retrieves a
     pinned public Object Storage `bundle.tar.gz` release, while Envoy routes
     `/` to Nginx and `/api` to the API on one HTTP origin. The archive is
     necessary because public bucket reads intentionally do not permit listing
     the hashed Vite assets.
-  - [ ] Clearly label the no-DNS/no-certificate HTTP bridge as demo-only. When
+  - [x] Clearly label the no-DNS/no-certificate HTTP bridge as demo-only. When
     DNS and TLS are available, replace it with direct HTTPS bucket/CDN UI
     delivery plus HTTPS API and scoped CORS.
 - [x] Build, test, and publish a versioned UI artefact to Object Storage.
@@ -152,7 +152,8 @@
     `todo-runtime-vault`; the API later references it through
     `imagePullSecrets`. Image signing remains optional and is not a
     prerequisite for the initial image publication.
-- [ ] Verify Flux reconciliation and the browser request flow.
+- [x] Verify Flux reconciliation and the public HTTP request flow through Envoy:
+  the UI returns `200 OK` and `/api/tasks` returns a successful API response.
 
 ## Decommissioning
 
