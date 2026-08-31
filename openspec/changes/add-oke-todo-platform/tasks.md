@@ -147,6 +147,15 @@
   - [x] Upload the immutable UI release through that write-only PAR without
     logging its URL. Do not grant GitHub Actions an OCI user/API key or
     Kubernetes access.
+  - [x] Document manual GitOps promotion: after a successful UI build, a
+    developer updates only the Git-SHA-pinned `UI_RELEASE_BUNDLE_URL` in the
+    Nginx bridge manifest, commits it, and lets Flux perform the rolling
+    update. Document immutable-release rollback and direct Object Storage/CDN
+    delivery as the TLS-enabled future path.
+  - [ ] Optionally automate UI promotion by having GitHub Actions open a
+    reviewable pull request that changes only the pinned release SHA. It must
+    not write to Kubernetes or bypass the Git review and Flux reconciliation
+    boundary.
 - [x] Publish Todo API images to the Crossplane-managed OCIR repository at
   `fra.ocir.io` through the protected `ocir-publish` GitHub Environment.
   - [x] Install the OCI Artifacts Crossplane provider through Flux and declare

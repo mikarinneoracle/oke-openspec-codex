@@ -25,6 +25,14 @@ credentials, an OCI Workload Identity, or a listing operation. Gateway API
 routes `/api` to the Todo API Service and `/` to the Nginx Service, giving the
 browser one HTTP demo origin.
 
+UI publication and activation are deliberately separate. GitHub Actions writes
+only a new immutable `releases/<git-sha>/` artefact through the scoped PAR; it
+does not change Kubernetes. A developer promotes a reviewed release by changing
+the Git-managed `UI_RELEASE_BUNDLE_URL` pin in the Nginx bridge Deployment,
+then Flux performs the rolling replacement. This provides an auditable rollback
+to any previously published release. The exact procedure is documented in
+`docs/runbooks/promote-ui-release.md`.
+
 OKE's CRI-O enforces fully-qualified public image names. The bridge therefore
 uses `docker.io/nginxinc/nginx-unprivileged`, not an ambiguous short image name.
 

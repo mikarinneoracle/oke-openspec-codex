@@ -72,6 +72,9 @@ repository is documented in
 [`docs/runbooks/grant-crossplane-ocir-repository-access.md`](docs/runbooks/grant-crossplane-ocir-repository-access.md).
 The complete OCI Vault secret inventory, ownership model, and rotation paths
 are in [`docs/runbooks/vault-secrets.md`](docs/runbooks/vault-secrets.md).
+Publishing creates an immutable release but does not activate it: the reviewed
+GitOps promotion procedure for the pinned Nginx demo-bridge release is in
+[`docs/runbooks/promote-ui-release.md`](docs/runbooks/promote-ui-release.md).
 
 ## Todo application runtime
 
