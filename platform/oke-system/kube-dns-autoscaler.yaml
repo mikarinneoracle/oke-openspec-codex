@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kube-dns-autoscaler
+  namespace: kube-system
+spec:
+  template:
+    spec:
+      # Retain OKE's preemptible-node toleration and add the dedicated
+      # system-pool taint toleration. This is intentionally a narrow
+      # server-side-apply overlay; OKE continues to own the add-on spec.
+      tolerations:
+        - key: oci.oraclecloud.com/oke-is-preemptible
+          operator: Exists
+        - key: CriticalAddonsOnly
+          operator: Exists
+          effect: NoSchedule

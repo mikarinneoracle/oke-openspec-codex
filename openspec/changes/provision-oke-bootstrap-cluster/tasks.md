@@ -56,5 +56,10 @@
     limit, and OCI VCN-native secondary VNIC pod networking. It consolidates
     empty capacity after ten minutes. No static floor, spot capacity, or
     additional optional KPO feature is enabled.
+  - The OKE-managed `kube-dns-autoscaler` must tolerate
+    `CriticalAddonsOnly:NoSchedule` so it stays on the fixed system pool and
+    does not create an artificial Karpenter scale-out demand. Manage this as a
+    narrow, non-pruning Flux server-side-apply overlay; do not replace the OKE
+    add-on Deployment or patch it manually.
 - [ ] Add an optional Git-managed static Karpenter NodePool only when a manual
   capacity floor is needed.

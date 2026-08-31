@@ -41,6 +41,23 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: oke-system
+  namespace: flux-system
+spec:
+  interval: 1m0s
+  path: ./platform/oke-system
+  # This Kustomization overlays an OKE-managed add-on. Never prune the
+  # Deployment if the overlay is later removed from Git.
+  prune: false
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  timeout: 2m0s
+  wait: true
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: karpenter-core
   namespace: flux-system
 spec:
@@ -63,6 +80,7 @@ metadata:
 spec:
   dependsOn:
     - name: karpenter-core
+    - name: oke-system
   interval: 1m0s
   path: ./platform/karpenter/capacity
   prune: true

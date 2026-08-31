@@ -32,9 +32,11 @@ Crossplane, the Todo API, and the UI workload before any later autoscaling work.
 
 The first managed node pool is the cluster survival pool. It has one
 non-preemptible node initially, is labeled `node-role/system: "true"`, and is
-tainted `CriticalAddonsOnly=true:NoSchedule`. Flux, Karpenter, CoreDNS, Envoy
-Gateway, and Crossplane must declare the matching toleration when they are
-placed on this pool.
+tainted `CriticalAddonsOnly=true:NoSchedule`. Flux, Karpenter, CoreDNS, the
+OKE `kube-dns-autoscaler`, Envoy Gateway, and Crossplane must declare the
+matching toleration when they are placed on this pool. The autoscaler is an
+OKE-managed add-on; Flux applies a narrow, non-pruning server-side-apply
+overlay that manages only its tolerations.
 
 Karpenter Provider for OCI (KPO) is installed by Flux after bootstrap. Its
 `OCINodeClass` selects the Terraform-created worker and pod subnets and NSGs by
