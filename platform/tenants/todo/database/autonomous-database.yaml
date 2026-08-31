@@ -1,0 +1,32 @@
+apiVersion: database.oci.upbound.io/v1alpha1
+kind: AutonomousDatabase
+metadata:
+  name: todo-adb
+  labels:
+    app.kubernetes.io/part-of: todo-db-app
+    app.kubernetes.io/component: database
+spec:
+  deletionPolicy: Delete
+  forProvider:
+    adminPasswordSecretRef:
+      key: password
+      name: todo-adb-admin
+    compartmentId: ocid1.compartment.oc1..aaaaaaaawccfklp2wj4c5ymigrkjfdhcbcm3u5ripl2whnznhmvgiqdatqgq
+    computeCount: 2
+    computeModel: ECPU
+    dataStorageSizeInGb: 20
+    dbName: tododb
+    dbWorkload: OLTP
+    displayName: oke-openspec-codex-todo-adb
+    isAutoScalingEnabled: false
+    isAutoScalingForStorageEnabled: false
+    isFreeTier: false
+    licenseModel: LICENSE_INCLUDED
+    nsgIds:
+      - ocid1.networksecuritygroup.oc1.eu-frankfurt-1.aaaaaaaacg4cqymeqrjmqwaadhxxblkjouevyyuexguh54chy6uikzbiu33a
+    privateEndpointLabel: todoadb
+    source: NONE
+    subnetIdRef:
+      name: todo-adb-private
+  providerConfigRef:
+    name: default

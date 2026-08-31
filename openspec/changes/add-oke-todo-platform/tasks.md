@@ -39,9 +39,9 @@
 - [ ] Declare Object Storage, workload identity, and required database resources
   through Crossplane.
   - [x] Install the OCI Database Crossplane provider through Flux.
-  - [ ] Declare a dedicated private subnet and network security rules for the
+  - [x] Declare a dedicated private subnet and network security rules for the
     Autonomous Database private endpoint through Crossplane.
-  - [ ] Treat the existing tenancy Vault as an external prerequisite. Do not
+  - [x] Treat the existing tenancy Vault as an external prerequisite. Do not
     create application Vault resources with Terraform; establish the GitOps
     secret-generation and synchronization flow without placing values in Git or
     Terraform state.
@@ -87,7 +87,7 @@
   - [ ] Declare a private Autonomous Database Serverless instance through
     Crossplane with `ECPU` compute model, 2 ECPUs, 20 GB initial storage, and
     auto scaling disabled.
-  - [ ] Declare the private versioned UI artefact bucket through Crossplane.
+  - [x] Declare the private versioned UI artefact bucket through Crossplane.
   - [ ] Create the Todo UI release-downloader ServiceAccount and grant it read
     access only to that bucket through OKE Workload Identity.
   - [x] Remove the Terraform-created ADB subnet, NSG, Vault key, Vault secret,

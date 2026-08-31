@@ -73,3 +73,19 @@ spec:
     kind: GitRepository
     name: flux-system
   timeout: 2m0s
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: todo-database
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: todo-secrets
+  interval: 1m0s
+  path: ./platform/tenants/todo/database
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  timeout: 2m0s
