@@ -102,7 +102,8 @@
 - [ ] Build, test, and publish a versioned UI artefact to Object Storage.
   - [ ] Create a time-bound `AnyObjectWrite` PAR restricted to the UI bucket's
     `releases/` prefix and store its complete URL only as the protected GitHub
-    Environment secret `OCI_TODO_UI_WRITE_PAR_URL`.
+    Environment secret `OCI_TODO_UI_WRITE_PAR_URL`, following the OCI CLI
+    runbook `docs/runbooks/create-ui-write-par.md`; do not use the OCI Console.
   - [ ] Upload the immutable UI release through that write-only PAR without
     logging its URL. Do not grant GitHub Actions an OCI user/API key or
     Kubernetes access.

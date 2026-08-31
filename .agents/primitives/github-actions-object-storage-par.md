@@ -14,6 +14,9 @@ workflow an OCI user, API key, Workload Identity, or Kubernetes credentials.
   secret `OCI_TODO_UI_WRITE_PAR_URL`.
 - The release workflow uploads the immutable, versioned UI artefact using that
   URL. It must not list, read, or overwrite unrelated bucket objects.
+- Follow [`../../docs/runbooks/create-ui-write-par.md`](../../docs/runbooks/create-ui-write-par.md)
+  for the manual OCI CLI creation, GitHub Environment storage, rotation, and
+  revocation procedure. Do not use the OCI Console.
 - Flux remains the only Kubernetes reconciler. GitHub Actions may commit a
   reviewed release reference but must never receive Kubernetes credentials or
   run `kubectl apply`.

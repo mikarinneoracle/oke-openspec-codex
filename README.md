@@ -56,6 +56,9 @@ vain `releases/`-prefiksiin rajatulla write-PAR-URL:lla. URL säilytetään vain
 suojattuna GitHub Environment Secretinä; Flux on edelleen ainoa Kubernetesiin
 kirjoittava toimija. Selain lataa versionoidun staattisen UI-releasen suoraan
 Object Storage -bucketista, jossa object-read on julkinen mutta listaus estetty.
+Write-PARin manuaalinen OCI CLI -luonti, GitHub Environment -tallennus ja
+rotaatio on kuvattu tiedostossa
+[`docs/runbooks/create-ui-write-par.md`](docs/runbooks/create-ui-write-par.md).
 
 <pre style="font-family: 'Courier New', Courier, monospace;">
 
