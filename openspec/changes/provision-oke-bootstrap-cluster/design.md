@@ -50,6 +50,12 @@ application capacity. If a manually maintained capacity floor is needed, it is
 a separate static Karpenter NodePool with a Git-managed replica count; it is not
 mixed into the dynamic pool.
 
+Karpenter-created capacity is visible in Kubernetes as Nodes and NodeClaims and
+in OCI Console as Compute instances. It does not appear as membership of an OKE
+managed node pool in the Console, because KPO launches and owns the Compute
+instances directly. This is expected behavior, not a missing node-pool
+registration.
+
 CoreDNS uses a toleration and preferred affinity for the system pool, rather
 than a hard node selector. This favors fixed capacity while allowing overflow
 to Karpenter nodes when necessary.

@@ -9,6 +9,7 @@ Browser
      -> /api/*  Todo API Service -> Node.js API pod -> Autonomous Database
 
 GitHub Actions -> versioned UI dist/ artefact -> OCI Object Storage
+GitHub Actions -> immutable Todo API image -> private OCIR repository
 ```
 
 The UI bucket provides anonymous object reads without object listing. It stores
@@ -21,7 +22,7 @@ developer working directory.
 ```text
 Reviewed Git manifests -> Flux -> OKE
 Crossplane manifests  -> Crossplane -> OCI resources
-CI build              -> Object Storage UI release
+CI publish            -> Object Storage UI release or private OCIR API image
 ```
 
 Flux is the only planned route for applying application and platform manifests
@@ -70,6 +71,12 @@ bootstrap procedure when its originating PAT expires.
 - GitHub Actions uses no OCI IAM principal for UI publication. Its protected
   environment holds only a write-only, expiry-bound PAR URL limited to the UI
   artefact `releases/` prefix; it must not be used by browser or UI runtime.
+- The Todo API image is published from the protected `ocir-publish` GitHub
+  Environment to the private, immutable Crossplane-managed OCIR repository at
+  `fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api`. The workflow uses an
+  OCI auth token limited to that repository and has no Kubernetes credentials.
+  OKE image-pull secret automation and image signing are intentionally optional
+  for the initial demo.
 - The Todo database is a private Autonomous Database Serverless instance using
   the `ECPU` compute model with 2 ECPUs, 20 GB initial storage, and auto
   scaling disabled. Its private endpoint has a dedicated subnet and security

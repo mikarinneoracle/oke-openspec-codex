@@ -39,7 +39,7 @@
   - [x] Limit each API replica to a lazy one-connection database pool
     (`poolMin: 0`, `poolMax: 1`) so horizontal scaling adds database
     concurrency predictably.
-- [ ] Declare Object Storage and required database resources
+- [x] Declare Object Storage and required database resources
   through Crossplane.
   - [x] Install the OCI Database Crossplane provider through Flux.
   - [x] Declare a dedicated private subnet and network security rules for the
@@ -90,7 +90,7 @@
   - [x] Declare a private Autonomous Database Serverless instance through
     Crossplane with `ECPU` compute model, 2 ECPUs, 20 GB initial storage, and
     auto scaling disabled.
-  - [ ] Declare the public, no-list versioned UI artefact bucket through
+  - [x] Declare the public, no-list versioned UI artefact bucket through
     Crossplane (`ObjectReadWithoutList`). No UI ServiceAccount or OKE Workload
     Identity is needed because browsers load public static files directly.
   - [x] Remove the Terraform-created ADB subnet, NSG, Vault key, Vault secret,
@@ -103,20 +103,27 @@
   - [ ] Clearly label the no-DNS/no-certificate HTTP bridge as demo-only. When
     DNS and TLS are available, replace it with direct HTTPS bucket/CDN UI
     delivery plus HTTPS API and scoped CORS.
-- [ ] Build, test, and publish a versioned UI artefact to Object Storage.
+- [x] Build, test, and publish a versioned UI artefact to Object Storage.
   - [x] Add the `Publish Todo UI` GitHub Actions workflow. It has only GitHub
     read access, uses the `ui-publish` environment, and uploads immutable
     `releases/<git-sha>/` files through the write-only PAR.
-  - [ ] Create a time-bound `AnyObjectWrite` PAR restricted to the UI bucket's
+  - [x] Create a time-bound `AnyObjectWrite` PAR restricted to the UI bucket's
     `releases/` prefix and store its complete URL only as the protected GitHub
     Environment secret `OCI_TODO_UI_WRITE_PAR_URL`, following the OCI CLI
     runbook `docs/runbooks/create-ui-write-par.md`; do not use the OCI Console.
-  - [ ] Upload the immutable UI release through that write-only PAR without
+  - [x] Upload the immutable UI release through that write-only PAR without
     logging its URL. Do not grant GitHub Actions an OCI user/API key or
     Kubernetes access.
 - [ ] Publish Todo API images to the Crossplane-managed OCIR repository at
   `fra.ocir.io` through the protected `ocir-publish` GitHub Environment.
-  - [ ] Store `OCI_REGISTRY_USERNAME` and `OCI_REGISTRY_AUTH_TOKEN` using the
+  - [ ] Install the OCI Artifacts Crossplane provider through Flux and declare
+    the private, immutable `oke-openspec-codex/todo-api` repository in the
+    `mika.rinne` compartment. Crossplane needs `manage repos in compartment`
+    in addition to its existing least-privilege OCI policy before it can create
+    the repository. Apply and verify that one-time post-bootstrap policy change
+    with `docs/runbooks/grant-crossplane-ocir-repository-access.md`; do not
+    update Terraform.
+  - [x] Store `OCI_REGISTRY_USERNAME` and `OCI_REGISTRY_AUTH_TOKEN` using the
     manual CLI procedure in `docs/runbooks/configure-ocir-actions-secrets.md`.
   - [ ] Keep OKE OCIR image-pull secret automation and image signing optional;
     they are not prerequisites for the initial demo image publication.

@@ -11,6 +11,9 @@ OCIR Docker login values without printing them or placing them in shell history.
   Crossplane-managed Todo API OCIR repository.
 - The OCIR registry is `fra.ocir.io` and the tenancy Object Storage namespace
   is `frsxwtjslf35`.
+- Crossplane has been granted its separate, scoped `manage repos` policy using
+  [`grant-crossplane-ocir-repository-access.md`](grant-crossplane-ocir-repository-access.md),
+  so Flux can create the private Todo API repository before this workflow runs.
 
 ## Store the secrets
 

@@ -17,8 +17,15 @@ commit the generated URL.
 
 ## Create and store the PAR
 
-Choose a recorded, finite RFC 3339 expiration timestamp. The value below is an
-example only; use an approved future date before running the command.
+Run the interactive script from the repository root:
+
+```sh
+sh scripts/configure-ui-write-par.sh
+```
+
+It asks for a recorded, finite RFC 3339 expiration timestamp, creates the PAR,
+and pipes its bearer URL directly to the GitHub Environment secret store. The
+equivalent manual command is retained below for auditing and troubleshooting.
 
 ```sh
 PAR_EXPIRY='REPLACE_WITH_APPROVED_RFC3339_EXPIRY'

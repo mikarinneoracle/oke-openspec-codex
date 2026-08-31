@@ -4,3 +4,4 @@ resources:
   - vault-key.yaml
   - adb-network.yaml
   - ui-bucket.yaml
+  - ocir-repository.yaml

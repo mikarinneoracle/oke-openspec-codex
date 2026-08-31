@@ -67,6 +67,9 @@ the write PAR are documented in
 [`docs/runbooks/create-ui-write-par.md`](docs/runbooks/create-ui-write-par.md).
 The corresponding CLI instructions for OCIR Actions authentication are in
 [`docs/runbooks/configure-ocir-actions-secrets.md`](docs/runbooks/configure-ocir-actions-secrets.md).
+The separate, scoped Crossplane IAM policy required to create the Todo API OCIR
+repository is documented in
+[`docs/runbooks/grant-crossplane-ocir-repository-access.md`](docs/runbooks/grant-crossplane-ocir-repository-access.md).
 
 ## Todo application runtime
 

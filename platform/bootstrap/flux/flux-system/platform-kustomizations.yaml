@@ -99,6 +99,7 @@ spec:
   dependsOn:
     - name: crossplane
     - name: external-secrets
+    - name: crossplane-oci-artifacts
   interval: 1m0s
   path: ./platform/tenants/todo/foundation
   prune: true

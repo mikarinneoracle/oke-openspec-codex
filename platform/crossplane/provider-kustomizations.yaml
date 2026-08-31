@@ -35,6 +35,27 @@ spec:
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
+  name: crossplane-oci-artifacts
+  namespace: flux-system
+spec:
+  dependsOn:
+    - name: crossplane-oci-family
+  interval: 1m0s
+  path: ./platform/crossplane/oci-artifacts
+  prune: true
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  timeout: 10m0s
+  wait: true
+  healthChecks:
+    - apiVersion: pkg.crossplane.io/v1
+      kind: Provider
+      name: provider-oci-artifacts
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
   name: crossplane-oci-database
   namespace: flux-system
 spec:

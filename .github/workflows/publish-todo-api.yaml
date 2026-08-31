@@ -1,0 +1,36 @@
+name: Publish Todo API
+on:
+  push:
+    branches: [main]
+    paths:
+      - services/todo-api/**
+      - .github/workflows/publish-todo-api.yaml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: ocir-publish
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: services/todo-api/package-lock.json
+      - working-directory: services/todo-api
+        run: |
+          npm ci
+          npm test
+          npm run lint
+      - uses: docker/login-action@v3
+        with:
+          registry: fra.ocir.io
+          username: ${{ secrets.OCI_REGISTRY_USERNAME }}
+          password: ${{ secrets.OCI_REGISTRY_AUTH_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: services/todo-api
+          push: true
+          tags: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:${{ github.sha }}
