@@ -11,6 +11,7 @@ spec:
     adminPasswordSecretRef:
       key: password
       name: todo-adb-admin
+      namespace: crossplane-system
     compartmentId: ocid1.compartment.oc1..aaaaaaaawccfklp2wj4c5ymigrkjfdhcbcm3u5ripl2whnznhmvgiqdatqgq
     computeCount: 2
     computeModel: ECPU
