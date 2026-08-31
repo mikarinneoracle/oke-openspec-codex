@@ -114,9 +114,9 @@
   - [x] Upload the immutable UI release through that write-only PAR without
     logging its URL. Do not grant GitHub Actions an OCI user/API key or
     Kubernetes access.
-- [ ] Publish Todo API images to the Crossplane-managed OCIR repository at
+- [x] Publish Todo API images to the Crossplane-managed OCIR repository at
   `fra.ocir.io` through the protected `ocir-publish` GitHub Environment.
-  - [ ] Install the OCI Artifacts Crossplane provider through Flux and declare
+  - [x] Install the OCI Artifacts Crossplane provider through Flux and declare
     the private `oke-openspec-codex/todo-api` repository in the `mika.rinne`
     compartment. Releases use unique Git SHA tags and the workflow never
     overwrites a tag; OCI Artifacts does not currently support enforcing
