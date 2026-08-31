@@ -38,6 +38,11 @@ const theme = createTheme({
   },
 });
 
+// The static UI is served from Object Storage, while the API remains behind
+// Envoy Gateway. A release workflow supplies this HTTPS API origin at build
+// time; local development keeps same-origin relative requests.
+const apiBaseUrl = import.meta.env.VITE_TODO_API_BASE_URL?.replace(/\/$/, '') ?? '';
+
 function TodoApp() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [filter, setFilter] = useState<FilterType>('all');
@@ -46,7 +51,7 @@ function TodoApp() {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const request = useCallback(async <T,>(path: string, init?: RequestInit): Promise<T> => {
-    const response = await fetch(path, { ...init, headers: { 'content-type': 'application/json', ...init?.headers } });
+    const response = await fetch(`${apiBaseUrl}${path}`, { ...init, headers: { 'content-type': 'application/json', ...init?.headers } });
     if (!response.ok) throw new Error('The Todo service is temporarily unavailable.');
     return response.status === 204 ? undefined as T : response.json() as Promise<T>;
   }, []);

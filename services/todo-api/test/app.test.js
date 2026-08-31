@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { createApp } from '../src/app.js';
 
-async function withApi(repository, callback) {
-  const server = createApp({ taskRepository: repository, readinessCheck: async () => {} }).listen(0, '127.0.0.1');
+async function withApi(repository, callback, options = {}) {
+  const server = createApp({ taskRepository: repository, readinessCheck: async () => {}, ...options }).listen(0, '127.0.0.1');
   await new Promise((resolve) => server.once('listening', resolve));
   const address = server.address();
   try {
@@ -38,4 +38,16 @@ test('rejects invalid task payloads', async () => {
     assert.equal(response.status, 400);
     assert.deepEqual(await response.json(), { error: 'title must contain 1 to 500 characters' });
   });
+});
+
+test('permits CORS only for the configured static UI origin', async () => {
+  const repository = { listTasks: async () => [], createTask: async () => {}, updateTask: async () => undefined, deleteTask: async () => false };
+  const origin = 'https://objectstorage.eu-frankfurt-1.oraclecloud.com';
+  await withApi(repository, async (baseUrl) => {
+    const preflight = await fetch(`${baseUrl}/api/tasks`, { method: 'OPTIONS', headers: { origin, 'access-control-request-method': 'GET' } });
+    assert.equal(preflight.status, 204);
+    assert.equal(preflight.headers.get('access-control-allow-origin'), origin);
+    const rejected = await fetch(`${baseUrl}/api/tasks`, { headers: { origin: 'https://untrusted.example' } });
+    assert.equal(rejected.headers.get('access-control-allow-origin'), null);
+  }, { corsAllowedOrigin: origin });
 });

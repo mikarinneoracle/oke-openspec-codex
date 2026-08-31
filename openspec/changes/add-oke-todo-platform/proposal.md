@@ -10,10 +10,11 @@ and Oracle database access without exposing database credentials to a browser.
 
 - Add a React/Vite Todo UI under `apps/todo-db-app/`.
 - Add a Node.js Todo REST API under `services/todo-api/`, using `node-oracledb`.
-- Use Envoy Gateway with standard Gateway API resources for `/` and `/api`
-  routing.
-- Store versioned UI build artefacts in OCI Object Storage and serve a pinned
-  release through an OKE UI workload.
+- Use Envoy Gateway with standard Gateway API resources for the Todo API.
+- Store and serve immutable, versioned UI build artefacts directly from a
+  Crossplane-managed public-read/no-list OCI Object Storage bucket.
+- Publish UI artefacts from GitHub Actions through a scoped write-only PAR;
+  Actions never receives OCI API credentials or Kubernetes access.
 - Bootstrap Flux and use Crossplane to declare the OCI resources needed by the
   platform.
 

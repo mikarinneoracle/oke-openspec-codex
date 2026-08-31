@@ -34,6 +34,9 @@
   an OCI user/API key for UI artefact publication.
 - [ ] Add build, test, image publication, and UI artefact publication after the
   application source is imported.
+  - The UI artefact bucket is Crossplane-managed with public object reads and
+    no listing. Actions uploads immutable `releases/<version>/` files only via
+    the write-PAR primitive; it has no OCI API credential.
 - [ ] Commit release references for Flux; never apply manifests from Actions.
 
 ## Cluster handoff

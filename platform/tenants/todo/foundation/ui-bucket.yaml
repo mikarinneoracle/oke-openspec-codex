@@ -8,7 +8,9 @@ metadata:
 spec:
   deletionPolicy: Delete
   forProvider:
-    accessType: NoPublicAccess
+    # The Todo UI is public static content. Object metadata and object listing
+    # remain unavailable to anonymous callers.
+    accessType: ObjectReadWithoutList
     compartmentId: ocid1.compartment.oc1..aaaaaaaawccfklp2wj4c5ymigrkjfdhcbcm3u5ripl2whnznhmvgiqdatqgq
     name: oke-openspec-codex-todo-ui
     namespace: frsxwtjslf35

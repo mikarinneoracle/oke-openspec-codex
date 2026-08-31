@@ -4,8 +4,24 @@ import { isReady } from './database.js';
 import * as tasks from './tasks.js';
 import { validateNewTask, validateTaskPatch } from './validation.js';
 
-export function createApp({ taskRepository = tasks, readinessCheck = isReady } = {}) {
+export function createApp({
+  taskRepository = tasks,
+  readinessCheck = isReady,
+  corsAllowedOrigin = process.env.CORS_ALLOWED_ORIGIN,
+} = {}) {
   const app = express();
+  app.use((request, response, next) => {
+    if (corsAllowedOrigin && request.get('origin') === corsAllowedOrigin) {
+      response.set({
+        'access-control-allow-origin': corsAllowedOrigin,
+        'access-control-allow-methods': 'GET, POST, PATCH, DELETE, OPTIONS',
+        'access-control-allow-headers': 'content-type',
+        vary: 'Origin',
+      });
+      if (request.method === 'OPTIONS') return response.status(204).end();
+    }
+    return next();
+  });
   app.use(express.json({ limit: '16kb' }));
   app.get('/health/live', (_request, response) => response.status(200).json({ status: 'ok' }));
   app.get('/health/ready', async (_request, response) => {

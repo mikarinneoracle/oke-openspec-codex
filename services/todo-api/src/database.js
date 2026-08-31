@@ -5,7 +5,10 @@ let pool;
 function databaseConfig() {
   const { TODO_DB_USER: user, TODO_DB_PASSWORD: password, TODO_DB_CONNECT_STRING: connectString } = process.env;
   if (!user || !password || !connectString) throw new Error('Database configuration is incomplete');
-  return { user, password, connectString, poolMin: 0, poolMax: 4, poolIncrement: 1 };
+  // Keep per-pod database pressure deliberately small. Horizontal pod scaling
+  // raises aggregate concurrency predictably without each replica reserving a
+  // large Autonomous Database connection pool.
+  return { user, password, connectString, poolMin: 0, poolMax: 1, poolIncrement: 1 };
 }
 
 export async function getPool() {

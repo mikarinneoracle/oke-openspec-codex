@@ -20,10 +20,16 @@ Do not commit their values:
 - `TODO_DB_USER`
 - `TODO_DB_PASSWORD`
 - `TODO_DB_CONNECT_STRING`
+- `CORS_ALLOWED_ORIGIN` (the exact HTTPS Object Storage UI origin; no wildcard)
 
 Run [`database/schema.sql`](database/schema.sql) in the application schema
 before the readiness endpoint can succeed. The later Crossplane/database task
 owns database provisioning and runtime secret delivery.
+
+Each API pod uses a lazy `node-oracledb` pool with `poolMin: 0` and
+`poolMax: 1`. A pool avoids opening a new database connection for every HTTP
+request while keeping database concurrency proportional to the number of API
+replicas.
 
 ## Local validation
 

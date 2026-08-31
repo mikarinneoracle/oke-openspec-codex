@@ -9,11 +9,18 @@ and Oracle Autonomous Database persistence.
 ## Desired topology
 
 - Envoy Gateway implements Kubernetes Gateway API ingress.
-- `/` routes to the Todo UI service and `/api` routes to the Todo REST API.
-- The UI release artefact is stored in OCI Object Storage. An OKE workload
-  retrieves a pinned release using least-privilege workload identity.
+- The Todo UI is served directly from its public, no-list Object Storage bucket;
+  `/api` routes through Envoy Gateway to the Todo REST API.
+- The UI release artefact is stored in OCI Object Storage under an immutable,
+  versioned prefix. It is public static content; application and bucket writes
+  remain restricted.
 - The REST API uses `node-oracledb` on the server side only. Browser code never
   receives database credentials.
+- Each Todo API pod uses a lazy `node-oracledb` pool with `poolMin: 0` and
+  `poolMax: 1`. Horizontal scaling therefore increases database concurrency in
+  one-connection increments rather than multiplying a large per-pod pool.
+- The static UI uses an explicit HTTPS Envoy Gateway API origin. The API permits
+  CORS only from the configured Object Storage UI origin.
 - Crossplane declares OCI infrastructure required by the application.
 - Flux reconciles reviewed Git manifests to the cluster.
 - External Secrets Operator (ESO), reconciled by Flux, is the approved bridge
@@ -33,8 +40,7 @@ and Oracle Autonomous Database persistence.
 - GitHub Actions does not receive Kubernetes write access and does not run
   `kubectl apply`.
 - The PAR is scoped to the UI bucket's `releases/` prefix and is a CI-only
-  bearer secret. UI runtime reads use a separate OKE Workload Identity rather
-  than the CI PAR.
+  bearer secret. It is never exposed to a browser or Kubernetes workload.
 - Flux runs in OKE and polls the GitHub repository. It is the continuous
   Kubernetes reconciler after the one-time approved bootstrap handoff.
 

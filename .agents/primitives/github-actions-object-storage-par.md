@@ -22,9 +22,8 @@ workflow an OCI user, API key, Workload Identity, or Kubernetes credentials.
 
 - A PAR URL is a bearer secret. Never commit it, render it in logs, put it in a
   manifest, or store it in Terraform state.
-- Do not use a read/write PAR. The CI publisher needs write access only; the UI
-  runtime retrieves releases through its separate, least-privilege OKE
-  Workload Identity.
+- Do not use a read/write PAR. The CI publisher needs write access only; the
+  browser retrieves the public UI release directly from Object Storage.
 - Set and record an expiry date. Replace the GitHub Environment secret before
   expiry or whenever its exposure is suspected; a PAR cannot be edited.
 - Do not use the PAR to create, delete, or change Object Storage infrastructure.

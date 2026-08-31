@@ -19,6 +19,11 @@ Flux in OKE
 GitHub Actions has no Kubernetes write permission. Flux is installed once by an
 approved bootstrap handoff and becomes the only continuous Kubernetes writer.
 
+The Todo UI is public static content served directly from a Crossplane-managed
+Object Storage bucket with object listing disabled. Envoy Gateway remains the
+ingress for the Todo API only. The browser-facing UI build contains the HTTPS
+API origin and the API permits CORS only from that UI origin.
+
 ## Terraform source strategy
 
 Use the reviewed `oke-rm` source as a transparent reference, not as an opaque

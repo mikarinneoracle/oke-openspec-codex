@@ -36,7 +36,10 @@
 
 - [x] Import the Todo UI source under `apps/todo-db-app/`.
 - [x] Implement the Node.js REST API and its `node-oracledb` persistence.
-- [ ] Declare Object Storage, workload identity, and required database resources
+  - [x] Limit each API replica to a lazy one-connection database pool
+    (`poolMin: 0`, `poolMax: 1`) so horizontal scaling adds database
+    concurrency predictably.
+- [ ] Declare Object Storage and required database resources
   through Crossplane.
   - [x] Install the OCI Database Crossplane provider through Flux.
   - [x] Declare a dedicated private subnet and network security rules for the
@@ -87,13 +90,15 @@
   - [x] Declare a private Autonomous Database Serverless instance through
     Crossplane with `ECPU` compute model, 2 ECPUs, 20 GB initial storage, and
     auto scaling disabled.
-  - [x] Declare the private versioned UI artefact bucket through Crossplane.
-  - [ ] Create the Todo UI release-downloader ServiceAccount and grant it read
-    access only to that bucket through OKE Workload Identity.
+  - [ ] Declare the public, no-list versioned UI artefact bucket through
+    Crossplane (`ObjectReadWithoutList`). No UI ServiceAccount or OKE Workload
+    Identity is needed because browsers load public static files directly.
   - [x] Remove the Terraform-created ADB subnet, NSG, Vault key, Vault secret,
     and local generated password after explicit approval. The shared existing
     OCI Vault remains an external platform prerequisite.
 - [ ] Add UI and API Kubernetes manifests, Gateway, and HTTPRoute.
+  - [ ] Expose the API through an HTTPS Envoy Gateway listener and permit CORS
+    only from the configured public Object Storage UI origin.
 - [ ] Build, test, and publish a versioned UI artefact to Object Storage.
   - [ ] Create a time-bound `AnyObjectWrite` PAR restricted to the UI bucket's
     `releases/` prefix and store its complete URL only as the protected GitHub
