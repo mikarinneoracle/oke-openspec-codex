@@ -21,7 +21,8 @@ spec:
       retries: 3
   values:
     installCRDs: true
-    tolerations:
-      - key: CriticalAddonsOnly
-        operator: Exists
-        effect: NoSchedule
+    global:
+      tolerations:
+        - key: CriticalAddonsOnly
+          operator: Exists
+          effect: NoSchedule
