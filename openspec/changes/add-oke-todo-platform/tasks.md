@@ -84,7 +84,7 @@
     Identity to generate the database-admin password, store it in the existing
     OCI Vault, and materialize it only as the scoped
     `crossplane-system` Kubernetes Secret required by Crossplane.
-  - [ ] Declare a private Autonomous Database Serverless instance through
+  - [x] Declare a private Autonomous Database Serverless instance through
     Crossplane with `ECPU` compute model, 2 ECPUs, 20 GB initial storage, and
     auto scaling disabled.
   - [x] Declare the private versioned UI artefact bucket through Crossplane.
