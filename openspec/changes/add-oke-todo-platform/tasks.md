@@ -50,6 +50,33 @@
     and grants the External Secrets workload only the OCI Vault secret-family
     permissions it needs. Do not add these through a post-bootstrap Terraform
     apply.
+    - Crossplane principal:
+      `crossplane-system/crossplane-provider-oci`, constrained by this OKE
+      cluster ID. Its OCI IAM policy needs:
+      - `read objectstorage-namespaces in tenancy`, so bucket declarations can
+        resolve the tenancy namespace.
+      - `manage object-family in compartment`, so Crossplane creates and
+        reconciles only the Todo UI artefact bucket and its objects.
+      - `manage autonomous-database-family in compartment`, so Crossplane
+        creates and reconciles the private Todo Autonomous Database Serverless
+        instance.
+      - `manage virtual-network-family in compartment`, so Crossplane creates
+        the ADB private subnet and network security group/rules.
+      - `read vaults in compartment` and `manage keys in compartment`, so
+        Crossplane can use the existing Vault and create the application-owned
+        encryption key required by ESO PushSecret. It must not create a Vault.
+    - ESO Vault principal:
+      `crossplane-system/todo-vault-reader`, constrained by this OKE cluster
+      ID and referenced by the namespaced `SecretStore`. Its OCI IAM policy
+      needs `use vaults`, `use keys`, and `manage secret-family` in the
+      compartment, restricted to the existing Vault where OCI policy conditions
+      allow it. This permits ESO to generate, push, read, and rotate the Todo
+      database-admin secret; it does not permit database, network, or Object
+      Storage operations.
+    - Create or update these policies once through OCI IAM/CLI as an explicit
+      bootstrap-access exception. The policies enable Crossplane and ESO to act
+      but are not application infrastructure and are never managed by a
+      post-bootstrap Terraform apply.
   - [ ] Install External Secrets Operator (ESO) through Flux. Use OKE Workload
     Identity to generate the database-admin password, store it in the existing
     OCI Vault, and materialize it only as the scoped
