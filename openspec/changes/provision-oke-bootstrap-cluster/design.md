@@ -66,7 +66,7 @@ to Karpenter nodes when necessary.
 
 ## Confirmed baseline decisions
 
-- Region: `eu-frankfurt-1`.
+- Region: developer-selected OCI region (for example, `eu-frankfurt-1`).
 - Target compartment: developer-selected (the OCID is supplied only in local
   `terraform.tfvars` or Resource Manager stack variables).
 - Terraform creates a new VCN.
