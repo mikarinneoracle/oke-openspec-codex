@@ -51,5 +51,15 @@ bootstrap procedure when its originating PAT expires.
   cluster and namespace; no OCI API key is stored in Git or Kubernetes.
 - Workload identity grants the UI release downloader read access only to its
   designated bucket/path.
+- The Todo database is a private Autonomous Database Serverless instance using
+  the `ECPU` compute model with 2 ECPUs, 20 GB initial storage, and auto
+  scaling disabled. Its private endpoint has a dedicated subnet and security
+  rules rather than a public database endpoint.
+- Terraform creates the OCI Vault, its encryption key, and the generated
+  database-admin password. The password is stored in OCI Vault and in local
+  Terraform state as a sensitive value; it is never committed. External
+  Secrets Operator, installed by Flux, uses a dedicated OKE Workload Identity
+  to synchronize the password only to the namespace Crossplane needs while
+  provisioning the database.
 - API access uses the same public origin (`/api`) as the UI, avoiding a browser
   CORS dependency.

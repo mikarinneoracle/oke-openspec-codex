@@ -36,6 +36,24 @@
 - [x] Implement the Node.js REST API and its `node-oracledb` persistence.
 - [ ] Declare Object Storage, workload identity, and required database resources
   through Crossplane.
+  - [x] Install the OCI Database Crossplane provider through Flux.
+  - [ ] Create a dedicated private subnet and network security rules for the
+    Autonomous Database private endpoint.
+  - [ ] Create an OCI Vault, encryption key, and a generated database-admin
+    password with Terraform. Keep the password out of Git; Terraform state is
+    local and contains it as a sensitive value.
+  - [ ] Grant the Crossplane OCI workload only Object Storage and Autonomous
+    Database permissions, and grant the External Secrets workload only the OCI
+    Vault secret-family permissions it needs.
+  - [ ] Install External Secrets Operator through Flux and use OKE Workload
+    Identity to synchronize the Vault database-admin secret to
+    `crossplane-system`.
+  - [ ] Declare a private Autonomous Database Serverless instance through
+    Crossplane with `ECPU` compute model, 2 ECPUs, 20 GB initial storage, and
+    auto scaling disabled.
+  - [ ] Declare the private versioned UI artefact bucket through Crossplane.
+  - [ ] Create the Todo UI release-downloader ServiceAccount and grant it read
+    access only to that bucket through OKE Workload Identity.
 - [ ] Add UI and API Kubernetes manifests, Gateway, and HTTPRoute.
 - [ ] Build, test, and publish a versioned UI artefact to Object Storage.
 - [ ] Verify Flux reconciliation and the browser request flow.
