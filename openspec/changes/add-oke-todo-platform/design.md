@@ -83,7 +83,10 @@ bootstrap procedure when its originating PAT expires.
   database password into `todo-app/todo-adb-runtime`; the non-sensitive `ADMIN`
   username and private server-TLS connect string are held in a ConfigMap. The
   Deployment references the immutable OCIR image by Git SHA and runs the
-  schema migration as an initContainer before serving requests.
+  schema migration as an initContainer before serving requests. Both
+  containers run explicitly as the image's non-root UID/GID `1000` because the
+  upstream Node image exposes its `node` user by name rather than a numeric
+  Dockerfile `USER` value.
 - The Todo database is a private Autonomous Database Serverless instance using
   the `ECPU` compute model with 2 ECPUs, 20 GB initial storage, and auto
   scaling disabled. Its private endpoint has a dedicated subnet and security

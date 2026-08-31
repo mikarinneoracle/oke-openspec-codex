@@ -93,6 +93,8 @@ spec:
               drop: [ALL]
             readOnlyRootFilesystem: true
             runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
       containers:
         - name: api
           image: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:8a6e8cc84ff821e2e6e4aae1b043ed2017135c8e
@@ -126,6 +128,8 @@ spec:
               drop: [ALL]
             readOnlyRootFilesystem: true
             runAsNonRoot: true
+            runAsUser: 1000
+            runAsGroup: 1000
 ---
 apiVersion: v1
 kind: Service
