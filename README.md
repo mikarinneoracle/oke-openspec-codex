@@ -70,6 +70,8 @@ The corresponding CLI instructions for OCIR Actions authentication are in
 The separate, scoped Crossplane IAM policy required to create the Todo API OCIR
 repository is documented in
 [`docs/runbooks/grant-crossplane-ocir-repository-access.md`](docs/runbooks/grant-crossplane-ocir-repository-access.md).
+The complete OCI Vault secret inventory, ownership model, and rotation paths
+are in [`docs/runbooks/vault-secrets.md`](docs/runbooks/vault-secrets.md).
 
 ## Todo application runtime
 

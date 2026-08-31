@@ -27,3 +27,6 @@ Secrets available to Flux-managed workloads and Crossplane.
 - Treat the existing OCI Vault as an external platform prerequisite. Do not
   register it as a Crossplane managed resource merely to read or synchronize
   secrets.
+- Keep the names, owners, consumers, access boundaries, and rotation paths for
+  every platform Vault secret in
+  [`../../docs/runbooks/vault-secrets.md`](../../docs/runbooks/vault-secrets.md).

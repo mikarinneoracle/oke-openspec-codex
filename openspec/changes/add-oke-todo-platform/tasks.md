@@ -127,8 +127,14 @@
     Terraform.
   - [x] Store `OCI_REGISTRY_USERNAME` and `OCI_REGISTRY_AUTH_TOKEN` using the
     manual CLI procedure in `docs/runbooks/configure-ocir-actions-secrets.md`.
-  - [ ] Keep OKE OCIR image-pull secret automation and image signing optional;
-    they are not prerequisites for the initial demo image publication.
+  - [ ] Deliver the private OCIR image-pull secret through the existing Vault
+    and ESO before deploying the API to OKE. The user enters the token only in
+    `scripts/configure-ocir-pull-secret.sh`; the script never reads GitHub
+    secrets. Flux then creates the `todo-app/todo-ocir-pull`
+    `kubernetes.io/dockerconfigjson` Secret through `ClusterSecretStore`
+    `todo-runtime-vault`; the API later references it through
+    `imagePullSecrets`. Image signing remains optional and is not a
+    prerequisite for the initial image publication.
 - [ ] Verify Flux reconciliation and the browser request flow.
 
 ## Decommissioning

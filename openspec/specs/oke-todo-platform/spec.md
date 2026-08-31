@@ -29,6 +29,10 @@ and Oracle Autonomous Database persistence.
 - External Secrets Operator (ESO), reconciled by Flux, is the approved bridge
   from OCI Vault to scoped Kubernetes Secrets. Crossplane and workloads consume
   references only; no secret values are committed to Git.
+- The private Todo API image pull configuration is held in the existing OCI
+  Vault. A Flux-managed `ClusterSecretStore` lets ESO materialize it only as
+  the `todo-app/todo-ocir-pull` `kubernetes.io/dockerconfigjson` Secret; the
+  API Deployment consumes it through `imagePullSecrets`.
 
 ## Delivery model
 
