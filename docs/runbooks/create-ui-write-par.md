@@ -10,11 +10,10 @@ commit the generated URL.
 - GitHub CLI is authenticated to the Todo repository.
 - A protected GitHub Environment already exists for UI publication. Substitute
   its name for `<github-environment>` below.
-- The same environment has a non-secret `TODO_API_BASE_URL` variable containing
-  the final HTTPS Envoy Gateway API origin, for example
-  `https://api.todo.example.com`. The workflow refuses to publish an UI build
-  until this value exists, preventing an HTTPS UI from being released with a
-  mixed-content HTTP API URL.
+- The current demo uses an Nginx UI bridge behind the same HTTP Envoy Gateway
+  origin as `/api`, so the workflow requires no API URL variable. When the
+  bridge is replaced by direct HTTPS bucket/CDN delivery, add a non-secret
+  `TODO_API_BASE_URL` GitHub Environment variable before publishing that build.
 
 ## Create and store the PAR
 

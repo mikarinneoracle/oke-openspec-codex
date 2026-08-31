@@ -18,10 +18,6 @@ jobs:
     runs-on: ubuntu-latest
     environment: ui-publish
     env:
-      # A non-secret GitHub Environment variable. It must be an HTTPS URL for
-      # the Envoy Gateway API endpoint; the browser cannot call an HTTP API
-      # from the HTTPS Object Storage UI.
-      TODO_API_BASE_URL: ${{ vars.TODO_API_BASE_URL }}
       OCI_TODO_UI_WRITE_PAR_URL: ${{ secrets.OCI_TODO_UI_WRITE_PAR_URL }}
       RELEASE_PREFIX: releases/${{ github.sha }}
     steps:
@@ -39,14 +35,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test -n "$TODO_API_BASE_URL"
           test -n "$OCI_TODO_UI_WRITE_PAR_URL"
-          case "$TODO_API_BASE_URL" in https://*) ;; *) exit 1 ;; esac
 
       - name: Build and lint UI
         working-directory: apps/todo-db-app
-        env:
-          VITE_TODO_API_BASE_URL: ${{ env.TODO_API_BASE_URL }}
         run: |
           npm ci
           npm run lint
@@ -78,5 +70,5 @@ jobs:
             echo '## Todo UI release published'
             echo
             echo "- Release prefix: \`$RELEASE_PREFIX/\`"
-            echo "- API origin: \`$TODO_API_BASE_URL\`"
+            echo '- API path: `/api` through the same-origin Envoy Gateway route'
           } >> "$GITHUB_STEP_SUMMARY"

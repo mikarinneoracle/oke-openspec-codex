@@ -4,14 +4,14 @@
 
 ```text
 Browser
-  -> Object Storage UI release (public object read; no list)
-  -> Envoy Gateway (Gateway API) /api/*
-     -> Todo API Service -> Node.js API pod -> Autonomous Database
+  -> Envoy Gateway (Gateway API, HTTP demo endpoint)
+     -> /       Nginx UI pod -> selected Object Storage UI release
+     -> /api/*  Todo API Service -> Node.js API pod -> Autonomous Database
 
 GitHub Actions -> versioned UI dist/ artefact -> OCI Object Storage
 ```
 
-The UI bucket provides anonymous object reads without object listing. It serves
+The UI bucket provides anonymous object reads without object listing. It stores
 only immutable, versioned static UI releases; Crossplane owns the bucket and
 GitHub Actions can write only through its scoped write-PAR. It is not a
 developer working directory.
@@ -80,10 +80,11 @@ bootstrap procedure when its originating PAT expires.
   Flux, generates and synchronizes the database-admin secret through OCI Vault
   to the namespace Crossplane needs. Secret values are never committed or held
   in Terraform state.
-- UI and API have separate HTTPS origins: the browser loads the static UI from
-  Object Storage and calls the Envoy Gateway API origin configured at build
-  time. The API allows CORS only from the selected UI origin; HTTP API URLs are
-  not permitted because a browser-loaded HTTPS UI would reject mixed content.
+- The temporary demo bridge serves the UI and API through the same Envoy
+  Gateway HTTP origin, avoiding browser CORS and mixed-content failures without
+  a domain or certificate. The browser-to-gateway hop is plaintext and is not a
+  production design. Replace the bridge with direct HTTPS bucket/CDN UI delivery
+  and an HTTPS API origin with scoped CORS when DNS and TLS become available.
 - Each API replica maintains a lazy, one-connection `node-oracledb` pool
   (`poolMin: 0`, `poolMax: 1`). This avoids a per-request connection handshake
   while keeping aggregate ADB concurrency proportional to the replica count.

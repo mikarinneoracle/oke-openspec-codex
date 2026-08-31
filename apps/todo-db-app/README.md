@@ -24,6 +24,8 @@ npm run lint
 `dist/` on rakennusartefakti. GitHub Actions julkaisee sen versionoituna OCI
 Object Storageen write-only PAR-URL:lla, joka on ainoastaan suojattuna GitHub
 Environment Secretinä (`OCI_TODO_UI_WRITE_PAR_URL`). URL on bearer-salaisuus,
-eikä sitä commitata tai tulosteta lokiin. Selain lataa versionoidun UI-releasen
-suoraan public-read/no-list Object Storage -bucketista. Julkaisuvaiheessa
-`VITE_TODO_API_BASE_URL` asetetaan Envoy Gatewayn HTTPS API-originiksi.
+eikä sitä commitata tai tulosteta lokiin. Nykyisessä no-DNS/no-certificate
+demossa Nginx UI -podi hakee versionoidun releasen public-read/no-list Object
+Storage -bucketista, ja Envoy Gateway tarjoaa UI:n sekä `/api`-reitin samasta
+HTTP-originista. Tämä bridge korvataan suoralla HTTPS Object Storage/CDN
+-toimituksella, kun DNS ja TLS ovat käytettävissä.

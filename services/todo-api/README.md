@@ -20,7 +20,8 @@ Do not commit their values:
 - `TODO_DB_USER`
 - `TODO_DB_PASSWORD`
 - `TODO_DB_CONNECT_STRING`
-- `CORS_ALLOWED_ORIGIN` (the exact HTTPS Object Storage UI origin; no wildcard)
+- `CORS_ALLOWED_ORIGIN` (optional; needed only after the HTTP demo bridge is
+  replaced by a separate HTTPS UI origin)
 
 Run [`database/schema.sql`](database/schema.sql) in the application schema
 before the readiness endpoint can succeed. The later Crossplane/database task

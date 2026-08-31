@@ -65,16 +65,20 @@ rotaatio on kuvattu tiedostossa
        TODO APPLICATION RUNTIME
 
        Browser
-         ├── UI ────► [ Object Storage ]
-         │             (public read, no list)
-         │
-         └── API ───► [ Envoy Gateway ] ───► [ Todo API ]
-                                                  │
-                                                  ▼
-                                      [ Autonomous Database ]
+         │  HTTP demo endpoint
+         ▼
+       [ Envoy Gateway ]
+         ├── / ─────► [ Nginx UI bridge ] ◄── [ Object Storage ]
+         │              (pinned release)      (public read, no list)
+         └── /api ──► [ Todo API ] ───► [ Autonomous Database ]
 
        [ External Secrets Operator ] ◄──► [ Existing OCI Vault ]
                     │
                     ▼
           [ Scoped Kubernetes Secrets ] ───► Todo API / Crossplane
 </pre>
+
+Nginx on väliaikainen demo-bridge, koska käytettävissä ei ole julkista DNS-nimeä
+ja TLS-sertifikaattia. Se antaa selaimelle saman HTTP-originin UI:lle ja
+`/api`-reitille. Tuotannossa se korvataan suoralla HTTPS Object Storage/CDN
+-toimituksella ja HTTPS API -originilla.

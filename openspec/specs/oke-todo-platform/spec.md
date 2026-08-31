@@ -9,8 +9,10 @@ and Oracle Autonomous Database persistence.
 ## Desired topology
 
 - Envoy Gateway implements Kubernetes Gateway API ingress.
-- The Todo UI is served directly from its public, no-list Object Storage bucket;
-  `/api` routes through Envoy Gateway to the Todo REST API.
+- The UI release is stored in a public, no-list Object Storage bucket. Until a
+  public DNS name and TLS certificate are available, a demo Nginx UI pod serves
+  the selected release through Envoy Gateway at `/`; `/api` routes through the
+  same Gateway to the Todo REST API.
 - The UI release artefact is stored in OCI Object Storage under an immutable,
   versioned prefix. It is public static content; application and bucket writes
   remain restricted.
@@ -19,8 +21,9 @@ and Oracle Autonomous Database persistence.
 - Each Todo API pod uses a lazy `node-oracledb` pool with `poolMin: 0` and
   `poolMax: 1`. Horizontal scaling therefore increases database concurrency in
   one-connection increments rather than multiplying a large per-pod pool.
-- The static UI uses an explicit HTTPS Envoy Gateway API origin. The API permits
-  CORS only from the configured Object Storage UI origin.
+- The demo UI and API share the Envoy Gateway HTTP origin, so browser CORS is
+  not required. This is not a production transport: direct bucket/CDN delivery
+  requires an HTTPS API origin and scoped CORS before the demo bridge is removed.
 - Crossplane declares OCI infrastructure required by the application.
 - Flux reconciles reviewed Git manifests to the cluster.
 - External Secrets Operator (ESO), reconciled by Flux, is the approved bridge

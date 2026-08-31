@@ -2,9 +2,9 @@
 
 ## Purpose
 
-Serve the Todo UI directly to browsers from OCI Object Storage while keeping
-the bucket declaratively owned by Crossplane and avoiding an unnecessary UI
-pod, Nginx container, or runtime OCI identity.
+Keep the Todo UI release in OCI Object Storage while providing an explicitly
+documented HTTP-only demo bridge when a public DNS name and TLS certificate are
+not available.
 
 ## Required design
 
@@ -15,10 +15,11 @@ pod, Nginx container, or runtime OCI identity.
 - Each UI build is immutable and uploaded under `releases/<version>/`. Vite
   uses relative asset URLs so that `index.html` and its assets work below that
   prefix.
-- The browser calls the Todo API through an explicit HTTPS Envoy Gateway origin
-  supplied at UI build time as `VITE_TODO_API_BASE_URL`.
-- The API permits CORS only from the chosen Object Storage UI origin. Do not
-  use an HTTP API origin because the HTTPS UI would be blocked as mixed content.
+- A temporary Nginx UI pod downloads the selected public release and is routed
+  at `/` through Envoy Gateway. Envoy routes `/api` to the Todo API, giving the
+  browser one HTTP origin and avoiding mixed content without a certificate.
+- This bridge is demo-only. A production deployment replaces it with direct
+  HTTPS bucket/CDN delivery and an HTTPS API origin with tightly scoped CORS.
 
 ## Ownership and safety boundary
 
@@ -26,7 +27,8 @@ pod, Nginx container, or runtime OCI identity.
   release-object upload through the separate write-PAR primitive.
 - The public bucket may contain only UI assets. Never put database material,
   PAR URLs, source maps containing secrets, logs, or unreviewed files there.
-- There is no UI Kubernetes Deployment, Nginx server, initContainer, or UI
-  ServiceAccount. Envoy Gateway remains the Kubernetes ingress for the API.
+- The demo bridge has an Nginx Deployment and an initContainer, but no UI OCI
+  identity because its deliberately public release is read over HTTPS. Envoy
+  Gateway remains the one public Kubernetes ingress for both UI and API.
 - A public read/no-list bucket is appropriate only for intentionally public
   static content. Revert it to `NoPublicAccess` if the bucket's purpose changes.

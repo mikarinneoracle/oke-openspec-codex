@@ -13,6 +13,9 @@ and Oracle database access without exposing database credentials to a browser.
 - Use Envoy Gateway with standard Gateway API resources for the Todo API.
 - Store and serve immutable, versioned UI build artefacts directly from a
   Crossplane-managed public-read/no-list OCI Object Storage bucket.
+- Use a clearly labeled temporary Nginx UI bridge behind Envoy Gateway when no
+  public DNS name or TLS certificate is available; replace it with direct HTTPS
+  bucket/CDN delivery when those prerequisites exist.
 - Publish UI artefacts from GitHub Actions through a scoped write-only PAR;
   Actions never receives OCI API credentials or Kubernetes access.
 - Bootstrap Flux and use Crossplane to declare the OCI resources needed by the
