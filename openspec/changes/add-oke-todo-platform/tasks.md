@@ -71,9 +71,11 @@
       ID and referenced by the namespaced `SecretStore`. Its OCI IAM policy
       needs `use vaults`, `use keys`, and `manage secret-family` in the
       compartment, restricted to the existing Vault where OCI policy conditions
-      allow it. This permits ESO to generate, push, read, and rotate the Todo
-      database-admin secret; it does not permit database, network, or Object
-      Storage operations.
+      allow it. Add `read secret-bundles` restricted to the generated Todo
+      secret name, because OCI's `GetSecretBundleByName` data-plane request is
+      authorized against that secret target. This permits ESO to generate,
+      push, read, and rotate the Todo database-admin secret; it does not permit
+      database, network, or Object Storage operations.
     - Create or update these policies once through OCI IAM/CLI as an explicit
       bootstrap-access exception. The policies enable Crossplane and ESO to act
       but are not application infrastructure and are never managed by a
