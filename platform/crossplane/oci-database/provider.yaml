@@ -1,0 +1,8 @@
+apiVersion: pkg.crossplane.io/v1
+kind: Provider
+metadata:
+  name: provider-oci-database
+spec:
+  package: ghcr.io/oracle/provider-oci-database:v1.1.0
+  runtimeConfigRef:
+    name: oci-workload-identity
