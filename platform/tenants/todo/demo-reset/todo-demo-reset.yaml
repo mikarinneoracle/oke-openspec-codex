@@ -33,17 +33,22 @@ data:
         'backup procedure', 'performance experiment', 'support request'
       );
       item_number PLS_INTEGER;
+      item_title VARCHAR2(500);
+      item_completed NUMBER(1);
     BEGIN
       DELETE FROM todo_items;
 
       FOR item_number IN 1..1000 LOOP
+        item_title := actions(MOD(item_number - 1, actions.COUNT) + 1) || ' ' ||
+          subjects(MOD(item_number - 1, subjects.COUNT) + 1) || ' #' ||
+          TO_CHAR(item_number);
+        item_completed := CASE WHEN MOD(item_number, 3) = 0 THEN 1 ELSE 0 END;
+
         INSERT INTO todo_items (id, title, completed)
         VALUES (
           'load-test-' || TO_CHAR(item_number, 'FM0000'),
-          actions(MOD(item_number - 1, actions.COUNT) + 1) || ' ' ||
-            subjects(MOD(item_number - 1, subjects.COUNT) + 1) || ' #' ||
-            TO_CHAR(item_number),
-          CASE WHEN MOD(item_number, 3) = 0 THEN 1 ELSE 0 END
+          item_title,
+          item_completed
         );
       END LOOP;
 
@@ -55,7 +60,7 @@ kind: Job
 metadata:
   # The promotion script changes this name for every release. A completed Job
   # must remain in place; TTL cleanup would make Flux recreate it repeatedly.
-  name: todo-demo-reset-fa6fc607
+  name: todo-demo-reset-fa6fc607-2
   namespace: todo-app
   labels:
     app.kubernetes.io/name: todo-api

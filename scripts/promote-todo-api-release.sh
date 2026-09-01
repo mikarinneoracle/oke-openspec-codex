@@ -54,7 +54,7 @@ fi
 
 image_reference_count="$(grep -Eo "${image_repository}:[0-9a-f]{40}" "$api_manifest" | wc -l | tr -d ' ')"
 reset_image_count="$(grep -Eo "${image_repository}:[0-9a-f]{40}" "$reset_manifest" | wc -l | tr -d ' ')"
-reset_job_name_count="$(grep -Eo 'todo-demo-reset-[0-9a-f]{8}' "$reset_manifest" | wc -l | tr -d ' ')"
+reset_job_name_count="$(grep -Eo 'todo-demo-reset-[0-9a-f]{8}(-[0-9]+)?' "$reset_manifest" | wc -l | tr -d ' ')"
 reset_version_count="$(grep -Eo 'app.kubernetes.io/version: "[0-9a-f]{40}"' "$reset_manifest" | wc -l | tr -d ' ')"
 
 if [[ "$image_reference_count" != "2" || "$reset_image_count" != "1" || "$reset_job_name_count" != "1" || "$reset_version_count" != "1" ]]; then
@@ -65,8 +65,13 @@ fi
 target_image="$image_repository:$release_sha"
 release_short_sha="${release_sha:0:8}"
 
+if grep -Fq "$target_image" "$api_manifest" && grep -Fq "$target_image" "$reset_manifest"; then
+  echo "The Todo API and demo reset already use $target_image."
+  exit 0
+fi
+
 perl -0pi -e "s{\Q$image_repository\E:[0-9a-f]{40}}{$target_image}g" "$api_manifest" "$reset_manifest"
-perl -0pi -e "s{todo-demo-reset-[0-9a-f]{8}}{todo-demo-reset-$release_short_sha}" "$reset_manifest"
+perl -0pi -e "s{todo-demo-reset-[0-9a-f]{8}(?:-[0-9]+)?}{todo-demo-reset-$release_short_sha}" "$reset_manifest"
 perl -0pi -e "s{app\.kubernetes\.io/version: \"[0-9a-f]{40}\"}{app.kubernetes.io/version: \"$release_sha\"}" "$reset_manifest"
 
 echo "Promoted Todo API image: $target_image"

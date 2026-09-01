@@ -34,6 +34,11 @@ the application Kustomization to be Ready, and then runs the one-shot
 `todo-demo-reset-<short-sha>` Job. That demo-only Job deliberately deletes all
 Todo rows and inserts the deterministic 1,000-row dataset.
 
+If a reset Job itself needs a corrected rerun, its name receives a numeric
+suffix (for example `todo-demo-reset-<short-sha>-2`). This is a new,
+reviewable Job while keeping the same promoted image pin; completed and failed
+Jobs are never restarted in place.
+
 The script does not commit, push, contact OCI, or use Kubernetes credentials.
 
 ## Verify

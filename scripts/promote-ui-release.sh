@@ -63,7 +63,7 @@ fi
 current_release="$(grep -Eo 'releases/[0-9a-f]{40}/bundle\.tar\.gz' "$manifest")"
 target_release="releases/$release_sha/bundle.tar.gz"
 release_short_sha="${release_sha:0:8}"
-reset_job_name_count="$(grep -Eo 'todo-demo-reset-[0-9a-f]{8}' "$reset_manifest" | wc -l | tr -d ' ')"
+reset_job_name_count="$(grep -Eo 'todo-demo-reset-[0-9a-f]{8}(-[0-9]+)?' "$reset_manifest" | wc -l | tr -d ' ')"
 reset_version_count="$(grep -Eo 'app.kubernetes.io/version: "[0-9a-f]{40}"' "$reset_manifest" | wc -l | tr -d ' ')"
 
 if [[ "$reset_job_name_count" != "1" || "$reset_version_count" != "1" ]]; then
@@ -77,7 +77,7 @@ if [[ "$current_release" == "$target_release" ]]; then
 fi
 
 perl -0pi -e "s{\Q$current_release\E}{$target_release}" "$manifest"
-perl -0pi -e "s{todo-demo-reset-[0-9a-f]{8}}{todo-demo-reset-$release_short_sha}" "$reset_manifest"
+perl -0pi -e "s{todo-demo-reset-[0-9a-f]{8}(?:-[0-9]+)?}{todo-demo-reset-$release_short_sha}" "$reset_manifest"
 perl -0pi -e "s{app\.kubernetes\.io/version: \"[0-9a-f]{40}\"}{app.kubernetes.io/version: \"$release_sha\"}" "$reset_manifest"
 
 echo "Promoted UI release reference:"

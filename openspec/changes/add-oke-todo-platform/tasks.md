@@ -202,6 +202,9 @@
     release-specific demo reset Job. Flux performs the rollout and reset only
     after the application is Ready; the reset dependency uses Flux's built-in
     readiness check rather than an uninitialised self-revision comparison.
+    If the one-shot reset SQL requires a correction, create a new Job name with
+    a numeric retry suffix; never modify or restart a completed or failed Job
+    in place.
 - [x] Verify Flux reconciliation and the public HTTP request flow through Envoy:
   the UI returns `200 OK` and `/api/tasks` returns a successful API response.
 
