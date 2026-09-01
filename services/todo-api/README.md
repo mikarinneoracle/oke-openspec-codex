@@ -12,6 +12,10 @@ only with `/api`; Oracle credentials remain in the API workload.
 - `PATCH /api/tasks/:id` with `{ "completed": true }`
 - `DELETE /api/tasks/:id`
 
+The Kubernetes probes use `/health/*` directly on the Pod. Envoy Gateway also
+publishes `/health/*` to the API for this demo, while browser application calls
+remain under `/api`.
+
 ## Configuration
 
 The Kubernetes deployment will supply these values through a Secret reference.

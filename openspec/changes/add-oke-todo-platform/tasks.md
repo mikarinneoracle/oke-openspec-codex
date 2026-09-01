@@ -206,6 +206,9 @@
     If the one-shot reset SQL requires a correction, create a new Job name with
     a numeric retry suffix; never modify or restart a completed or failed Job
     in place.
+  - [x] Route `/health/*` through Envoy Gateway to the Todo API so the public
+    demo can verify the pinned API version. Keep `/` on the Nginx UI bridge and
+    browser application requests under `/api`.
 - [x] Verify Flux reconciliation and the public HTTP request flow through Envoy:
   the UI returns `200 OK` and `/api/tasks` returns a successful API response.
 

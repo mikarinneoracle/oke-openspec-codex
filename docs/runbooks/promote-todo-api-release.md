@@ -56,4 +56,14 @@ Confirm that `todo-application` and `todo-demo-reset` are Ready, the new API
 pods are Ready, and the release-specific reset Job is `Completed`. Then refresh
 the browser UI and confirm that all 1,000 demo tasks are present again.
 
+The public demo health endpoint verifies the pinned runtime version:
+
+```sh
+curl http://79.76.119.39/health/live
+```
+
+It returns JSON containing `service`, `status`, and the promoted Git-SHA
+`version`. Replace the IP with the current Envoy load-balancer address if it
+changes.
+
 Do not use direct `kubectl` mutation; Flux reconciles the reviewed Git change.

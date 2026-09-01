@@ -92,6 +92,7 @@ reviewed image-pin promotion; use
          ├── / ─────► [ Nginx UI bridge ] ◄── [ Object Storage ]
          │              (pinned release)      (public read, no list)
          └── /api ──► [ Todo API ] ───► [ Autonomous Database ]
+             /health ─┘
 
        [ External Secrets Operator ] ◄──► [ Existing OCI Vault ]
                     │

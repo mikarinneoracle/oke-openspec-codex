@@ -11,8 +11,8 @@ and Oracle Autonomous Database persistence.
 - Envoy Gateway implements Kubernetes Gateway API ingress.
 - The UI release is stored in a public, no-list Object Storage bucket. Until a
   public DNS name and TLS certificate are available, a demo Nginx UI pod serves
-  the selected release through Envoy Gateway at `/`; `/api` routes through the
-  same Gateway to the Todo REST API.
+  the selected release through Envoy Gateway at `/`; `/api` and `/health` route
+  through the same Gateway to the Todo REST API.
 - The UI release artefact is stored in OCI Object Storage under an immutable,
   versioned prefix. It is public static content; application and bucket writes
   remain restricted.
@@ -42,7 +42,8 @@ and Oracle Autonomous Database persistence.
 - The demo Nginx bridge downloads a Git-SHA-pinned public
   `releases/<sha>/bundle.tar.gz` Object Storage object into an ephemeral volume.
   It has no OCI identity, PAR URL, or object-listing capability. Envoy Gateway
-  sends `/api` to the Todo API Service and all other paths to that Nginx Service.
+  sends `/api` and `/health` to the Todo API Service and all other paths to the
+  Nginx Service.
 - Crossplane declares OCI infrastructure required by the application.
 - Flux reconciles reviewed Git manifests to the cluster.
 - External Secrets Operator (ESO), reconciled by Flux, is the approved bridge
