@@ -196,6 +196,12 @@
     `todo-runtime-vault`; the API later references it through
     `imagePullSecrets`. Image signing remains optional and is not a
     prerequisite for the initial image publication.
+  - [x] Add reviewed API image promotion through
+    `scripts/promote-todo-api-release.sh`. The script pins the successful
+    immutable OCIR Git-SHA image in the API Deployment and creates a
+    release-specific demo reset Job. Flux performs the rollout and reset only
+    after the application is Ready; the reset dependency uses Flux's built-in
+    readiness check rather than an uninitialised self-revision comparison.
 - [x] Verify Flux reconciliation and the public HTTP request flow through Envoy:
   the UI returns `200 OK` and `/api/tasks` returns a successful API response.
 

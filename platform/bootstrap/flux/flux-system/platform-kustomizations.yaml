@@ -184,11 +184,6 @@ metadata:
 spec:
   dependsOn:
     - name: todo-application
-      # Require the same Git revision, not merely an earlier Ready condition.
-      readyExpr: >-
-        dep.metadata.generation == dep.status.observedGeneration &&
-        dep.status.conditions.filter(e, e.type == 'Ready').all(e, e.status == 'True') &&
-        dep.status.lastAppliedRevision == self.status.lastAttemptedRevision
   interval: 1m0s
   path: ./platform/tenants/todo/demo-reset
   prune: true

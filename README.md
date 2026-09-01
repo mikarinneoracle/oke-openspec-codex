@@ -75,6 +75,9 @@ are in [`docs/runbooks/vault-secrets.md`](docs/runbooks/vault-secrets.md).
 Publishing creates an immutable release but does not activate it: the reviewed
 GitOps promotion procedure for the pinned Nginx demo-bridge release is in
 [`docs/runbooks/promote-ui-release.md`](docs/runbooks/promote-ui-release.md).
+Successful API image builds are likewise immutable but inactive until a
+reviewed image-pin promotion; use
+[`docs/runbooks/promote-todo-api-release.md`](docs/runbooks/promote-todo-api-release.md).
 
 ## Todo application runtime
 

@@ -71,7 +71,7 @@ spec:
           type: RuntimeDefault
       initContainers:
         - name: schema-migration
-          image: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:de19dd532a1ef35d1547fe4c67a6433b0ee453f0
+          image: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:fa6fc6076ffec4902d9d7d2c9e49b6dec658cd6f
           imagePullPolicy: IfNotPresent
           command: [node, src/migrate.js]
           envFrom:
@@ -96,7 +96,7 @@ spec:
             runAsGroup: 1000
       containers:
         - name: api
-          image: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:de19dd532a1ef35d1547fe4c67a6433b0ee453f0
+          image: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:fa6fc6076ffec4902d9d7d2c9e49b6dec658cd6f
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

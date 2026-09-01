@@ -59,10 +59,18 @@ and Oracle Autonomous Database persistence.
   Flux exists: the cluster foundation and bootstrap IAM required for OKE
   Workload Identity. It does not manage application or post-bootstrap platform
   infrastructure after that handoff.
-- GitHub Actions validates Terraform and application changes, builds release
-  artefacts, publishes the versioned UI artefact through a time-bound,
+- GitHub Actions validates Terraform and application changes, builds immutable
+  release artefacts, publishes the versioned UI artefact through a time-bound,
   write-only Object Storage PAR stored as a protected GitHub Environment
-  secret, and commits approved release references to Git.
+  secret, and publishes the private Todo API image to OCIR with a unique Git
+  SHA tag. Publishing does not change a running workload.
+- A reviewed GitOps promotion pins the selected UI release or API image SHA in
+  a manifest and is the deployment decision. Flux reconciles that reviewed
+  change; GitHub Actions does not commit a deployment or access Kubernetes.
+- In this demo environment, every promoted release creates a uniquely named
+  post-deployment reset Job. After the Todo application Kustomization is
+  Ready, it deliberately replaces all Todo rows with the deterministic
+  1,000-row dataset. This destructive reset is not a production-data pattern.
 - GitHub Actions does not receive Kubernetes write access and does not run
   `kubectl apply`.
 - The PAR is scoped to the UI bucket's `releases/` prefix and is a CI-only
