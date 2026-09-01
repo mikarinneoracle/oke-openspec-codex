@@ -23,7 +23,7 @@ export function createApp({
     return next();
   });
   app.use(express.json({ limit: '16kb' }));
-  app.get('/health/live', (_request, response) => response.status(200).json({ status: 'ok' }));
+  app.get('/health/live', (_request, response) => response.status(200).json({ service: 'todo-api', status: 'ok' }));
   app.get('/health/ready', async (_request, response) => {
     try {
       await readinessCheck();

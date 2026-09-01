@@ -31,6 +31,15 @@ test('creates and lists tasks through the REST API', async () => {
   });
 });
 
+test('reports the Todo API liveness identity', async () => {
+  const repository = { listTasks: async () => [], createTask: async () => {}, updateTask: async () => undefined, deleteTask: async () => false };
+  await withApi(repository, async (baseUrl) => {
+    const response = await fetch(`${baseUrl}/health/live`);
+    assert.equal(response.status, 200);
+    assert.deepEqual(await response.json(), { service: 'todo-api', status: 'ok' });
+  });
+});
+
 test('rejects invalid task payloads', async () => {
   const repository = { listTasks: async () => [], createTask: async () => {}, updateTask: async () => undefined, deleteTask: async () => false };
   await withApi(repository, async (baseUrl) => {
