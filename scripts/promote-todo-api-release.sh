@@ -53,12 +53,13 @@ if [[ ! "$release_sha" =~ ^[0-9a-f]{40}$ ]]; then
 fi
 
 image_reference_count="$(grep -Eo "${image_repository}:[0-9a-f]{40}" "$api_manifest" | wc -l | tr -d ' ')"
+api_version_count="$(grep -Eo 'TODO_API_VERSION: [0-9a-f]{40}' "$api_manifest" | wc -l | tr -d ' ')"
 reset_image_count="$(grep -Eo "${image_repository}:[0-9a-f]{40}" "$reset_manifest" | wc -l | tr -d ' ')"
 reset_job_name_count="$(grep -Eo 'todo-demo-reset-[0-9a-f]{8}(-[0-9]+)?' "$reset_manifest" | wc -l | tr -d ' ')"
 reset_version_count="$(grep -Eo 'app.kubernetes.io/version: "[0-9a-f]{40}"' "$reset_manifest" | wc -l | tr -d ' ')"
 
-if [[ "$image_reference_count" != "2" || "$reset_image_count" != "1" || "$reset_job_name_count" != "1" || "$reset_version_count" != "1" ]]; then
-  echo "Expected two API deployment image pins and one reset image, Job name, and version label." >&2
+if [[ "$image_reference_count" != "2" || "$api_version_count" != "1" || "$reset_image_count" != "1" || "$reset_job_name_count" != "1" || "$reset_version_count" != "1" ]]; then
+  echo "Expected two API image pins, one API version, and one reset image, Job name, and version label." >&2
   exit 1
 fi
 
@@ -71,6 +72,7 @@ if grep -Fq "$target_image" "$api_manifest" && grep -Fq "$target_image" "$reset_
 fi
 
 perl -0pi -e "s{\Q$image_repository\E:[0-9a-f]{40}}{$target_image}g" "$api_manifest" "$reset_manifest"
+perl -0pi -e "s{TODO_API_VERSION: [0-9a-f]{40}}{TODO_API_VERSION: $release_sha}" "$api_manifest"
 perl -0pi -e "s{todo-demo-reset-[0-9a-f]{8}(?:-[0-9]+)?}{todo-demo-reset-$release_short_sha}" "$reset_manifest"
 perl -0pi -e "s{app\.kubernetes\.io/version: \"[0-9a-f]{40}\"}{app.kubernetes.io/version: \"$release_sha\"}" "$reset_manifest"
 

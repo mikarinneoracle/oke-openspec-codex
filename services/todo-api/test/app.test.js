@@ -36,8 +36,8 @@ test('reports the Todo API liveness identity', async () => {
   await withApi(repository, async (baseUrl) => {
     const response = await fetch(`${baseUrl}/health/live`);
     assert.equal(response.status, 200);
-    assert.deepEqual(await response.json(), { service: 'todo-api', status: 'ok' });
-  });
+    assert.deepEqual(await response.json(), { service: 'todo-api', status: 'ok', version: 'test-release' });
+  }, { apiVersion: 'test-release' });
 });
 
 test('rejects invalid task payloads', async () => {

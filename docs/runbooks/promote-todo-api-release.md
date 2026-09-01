@@ -19,6 +19,7 @@ The script finds the latest successful `Publish Todo API` workflow, requests
 confirmation, and changes only these Git-managed values:
 
 - the pinned API image in the migration init container and API container;
+- the `TODO_API_VERSION` runtime value returned by `GET /health/live`;
 - the image of the demo reset Job;
 - the reset Job's release-specific name and version label.
 

@@ -198,7 +198,8 @@
     prerequisite for the initial image publication.
   - [x] Add reviewed API image promotion through
     `scripts/promote-todo-api-release.sh`. The script pins the successful
-    immutable OCIR Git-SHA image in the API Deployment and creates a
+    immutable OCIR Git-SHA image in the API Deployment, exposes that SHA from
+    `GET /health/live`, and creates a
     release-specific demo reset Job. Flux performs the rollout and reset only
     after the application is Ready; the reset dependency uses Flux's built-in
     readiness check rather than an uninitialised self-revision comparison.

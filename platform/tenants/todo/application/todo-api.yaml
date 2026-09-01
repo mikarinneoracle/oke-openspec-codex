@@ -18,6 +18,7 @@ metadata:
     app.kubernetes.io/part-of: todo-db-app
 data:
   TODO_DB_USER: ADMIN
+  TODO_API_VERSION: fa6fc6076ffec4902d9d7d2c9e49b6dec658cd6f
   # ADB server-TLS endpoint: it needs no wallet and is reachable only through
   # the private endpoint NSG on TCP 1521.
   TODO_DB_CONNECT_STRING: >-

@@ -8,6 +8,7 @@ export function createApp({
   taskRepository = tasks,
   readinessCheck = isReady,
   corsAllowedOrigin = process.env.CORS_ALLOWED_ORIGIN,
+  apiVersion = process.env.TODO_API_VERSION ?? 'development',
 } = {}) {
   const app = express();
   app.use((request, response, next) => {
@@ -23,7 +24,7 @@ export function createApp({
     return next();
   });
   app.use(express.json({ limit: '16kb' }));
-  app.get('/health/live', (_request, response) => response.status(200).json({ service: 'todo-api', status: 'ok' }));
+  app.get('/health/live', (_request, response) => response.status(200).json({ service: 'todo-api', status: 'ok', version: apiVersion }));
   app.get('/health/ready', async (_request, response) => {
     try {
       await readinessCheck();
