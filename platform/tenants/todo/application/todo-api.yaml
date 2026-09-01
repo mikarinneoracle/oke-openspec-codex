@@ -18,7 +18,7 @@ metadata:
     app.kubernetes.io/part-of: todo-db-app
 data:
   TODO_DB_USER: ADMIN
-  TODO_API_VERSION: fa6fc6076ffec4902d9d7d2c9e49b6dec658cd6f
+  TODO_API_VERSION: 9f4a33e343cd20912f0a0ca68d7db92a6837f9ff
   # ADB server-TLS endpoint: it needs no wallet and is reachable only through
   # the private endpoint NSG on TCP 1521.
   TODO_DB_CONNECT_STRING: >-
@@ -72,7 +72,7 @@ spec:
           type: RuntimeDefault
       initContainers:
         - name: schema-migration
-          image: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:fa6fc6076ffec4902d9d7d2c9e49b6dec658cd6f
+          image: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:9f4a33e343cd20912f0a0ca68d7db92a6837f9ff
           imagePullPolicy: IfNotPresent
           command: [node, src/migrate.js]
           envFrom:
@@ -97,7 +97,7 @@ spec:
             runAsGroup: 1000
       containers:
         - name: api
-          image: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:fa6fc6076ffec4902d9d7d2c9e49b6dec658cd6f
+          image: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:9f4a33e343cd20912f0a0ca68d7db92a6837f9ff
           imagePullPolicy: IfNotPresent
           ports:
             - name: http

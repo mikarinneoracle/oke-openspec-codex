@@ -60,13 +60,13 @@ kind: Job
 metadata:
   # The promotion script changes this name for every release. A completed Job
   # must remain in place; TTL cleanup would make Flux recreate it repeatedly.
-  name: todo-demo-reset-fa6fc607-2
+  name: todo-demo-reset-9f4a33e3
   namespace: todo-app
   labels:
     app.kubernetes.io/name: todo-api
     app.kubernetes.io/part-of: todo-db-app
     app.kubernetes.io/component: demo-data-reset
-    app.kubernetes.io/version: "fa6fc6076ffec4902d9d7d2c9e49b6dec658cd6f"
+    app.kubernetes.io/version: "9f4a33e343cd20912f0a0ca68d7db92a6837f9ff"
 spec:
   backoffLimit: 0
   template:
@@ -84,7 +84,7 @@ spec:
           type: RuntimeDefault
       containers:
         - name: reset
-          image: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:fa6fc6076ffec4902d9d7d2c9e49b6dec658cd6f
+          image: fra.ocir.io/frsxwtjslf35/oke-openspec-codex/todo-api:9f4a33e343cd20912f0a0ca68d7db92a6837f9ff
           imagePullPolicy: IfNotPresent
           command: [node, /app/reset/reset.js]
           envFrom:
