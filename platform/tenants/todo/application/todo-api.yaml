@@ -55,9 +55,15 @@ metadata:
     app.kubernetes.io/name: todo-api
     app.kubernetes.io/part-of: todo-db-app
 spec:
-  # Maintain two API pods. The HPA remains omitted so this fixed availability
-  # floor cannot be scaled down by a CPU-driven controller.
+  # The HPA maintains this two-pod availability floor.
   replicas: 2
+  # Avoid creating a third API pod solely for a release. HPA-driven scale-out
+  # is independent of this rollout strategy.
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: todo-api

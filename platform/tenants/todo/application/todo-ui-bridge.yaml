@@ -42,6 +42,13 @@ metadata:
 spec:
   # Keep two UI pods available with the API.
   replicas: 2
+  # Do not create a third UI pod during a release just to preserve two ready
+  # replicas; the compact demo worker has no spare pod-count capacity.
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
   selector:
     matchLabels:
       app.kubernetes.io/name: todo-ui-bridge
