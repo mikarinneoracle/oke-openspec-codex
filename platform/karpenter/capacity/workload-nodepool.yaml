@@ -25,7 +25,9 @@ spec:
       terminationGracePeriod: 2h
   disruption:
     budgets:
-      - nodes: 10%
+      # Allow all empty dynamic workload nodes to be removed together after
+      # the Todo application is suspended.
+      - nodes: 100%
     consolidateAfter: 10m
     consolidationPolicy: WhenEmpty
   limits:

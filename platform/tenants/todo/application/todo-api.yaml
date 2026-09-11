@@ -55,6 +55,10 @@ metadata:
     app.kubernetes.io/name: todo-api
     app.kubernetes.io/part-of: todo-db-app
 spec:
+  # The application is intentionally suspended to release all dynamic
+  # Karpenter workload capacity. The HPA is omitted from this Kustomization
+  # while suspended so it cannot restore a replica.
+  replicas: 0
   selector:
     matchLabels:
       app.kubernetes.io/name: todo-api

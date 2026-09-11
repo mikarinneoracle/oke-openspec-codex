@@ -40,7 +40,9 @@ metadata:
     app.kubernetes.io/name: todo-ui-bridge
     app.kubernetes.io/part-of: todo-db-app
 spec:
-  replicas: 1
+  # Suspend the UI together with the API so Karpenter can deprovision the
+  # application NodeClaims after they become empty.
+  replicas: 0
   selector:
     matchLabels:
       app.kubernetes.io/name: todo-ui-bridge
