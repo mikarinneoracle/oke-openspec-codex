@@ -30,7 +30,9 @@ spec:
       - nodes: 100%
     # Demo feedback loop: release empty workload capacity promptly.
     consolidateAfter: 1m
-    consolidationPolicy: WhenEmpty
+    # Remove empty nodes and consolidate underutilized nodes after the HPA
+    # reduces application demand.
+    consolidationPolicy: WhenEmptyOrUnderutilized
   limits:
     # OCI reports a 1-OCPU E5 node as two Kubernetes vCPUs. Keep the CPU
     # ceiling aligned with four 1-OCPU nodes and the 32-Gi memory ceiling.
