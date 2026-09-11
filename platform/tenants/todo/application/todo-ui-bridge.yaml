@@ -79,7 +79,7 @@ spec:
               rm /work/bundle.tar.gz
           env:
             - name: UI_RELEASE_BUNDLE_URL
-              value: https://objectstorage.eu-frankfurt-1.oraclecloud.com/n/frsxwtjslf35/b/oke-openspec-codex-todo-ui/o/releases/e171c9f39292d1a7854b629a0c440c12a59075e6/bundle.tar.gz
+              value: https://objectstorage.eu-frankfurt-1.oraclecloud.com/n/frsxwtjslf35/b/oke-openspec-codex-todo-ui/o/releases/356461fa372499029a68aad761c68972209c09d5/bundle.tar.gz
           volumeMounts:
             - name: ui-files
               mountPath: /work

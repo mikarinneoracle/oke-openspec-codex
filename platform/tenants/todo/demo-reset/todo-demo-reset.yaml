@@ -60,13 +60,13 @@ kind: Job
 metadata:
   # The promotion script changes this name for every release. A completed Job
   # must remain in place; TTL cleanup would make Flux recreate it repeatedly.
-  name: todo-demo-reset-e171c9f3
+  name: todo-demo-reset-356461fa
   namespace: todo-app
   labels:
     app.kubernetes.io/name: todo-api
     app.kubernetes.io/part-of: todo-db-app
     app.kubernetes.io/component: demo-data-reset
-    app.kubernetes.io/version: "e171c9f39292d1a7854b629a0c440c12a59075e6"
+    app.kubernetes.io/version: "356461fa372499029a68aad761c68972209c09d5"
 spec:
   backoffLimit: 0
   template:
