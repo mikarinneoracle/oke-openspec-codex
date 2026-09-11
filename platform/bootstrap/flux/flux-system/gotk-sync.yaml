@@ -19,7 +19,8 @@ metadata:
   name: flux-system
   namespace: flux-system
 spec:
-  interval: 10m0s
+  # Demo feedback loop: fetch reviewed main changes within one minute.
+  interval: 1m0s
   path: ./platform/bootstrap/flux
   prune: true
   sourceRef:

@@ -28,7 +28,8 @@ spec:
       # Allow all empty dynamic workload nodes to be removed together after
       # the Todo application is suspended.
       - nodes: 100%
-    consolidateAfter: 10m
+    # Demo feedback loop: release empty workload capacity promptly.
+    consolidateAfter: 1m
     consolidationPolicy: WhenEmpty
   limits:
     # OCI reports a 1-OCPU E5 node as two Kubernetes vCPUs. Keep the CPU
