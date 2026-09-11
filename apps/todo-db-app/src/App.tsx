@@ -130,7 +130,7 @@ function TodoApp() {
         <Container maxWidth="sm" sx={{ px: { xs: 2, sm: 3 } }}>
           <Paper sx={{ border: 1, borderColor: 'divider', overflow: 'hidden' }}>
             <Box sx={{ p: isMobile ? 2 : 3, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <Typography variant="h5" component="h1">To-do list</Typography>
+              <Typography variant="h4" component="h1">To-do list</Typography>
               <Button onClick={() => setDialogOpen(true)} size={isMobile ? 'small' : 'medium'}>Add new task</Button>
             </Box>
             <Divider />
